@@ -25,7 +25,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Gia đình truyền thống tan rã làm thay đổi tư duy."
     ],
     correctAnswerIndex: 2,
-    explanation: "Khi tồn tại xã hội (điều kiện sống, phương thức sản xuất) thay đổi, ý thức xã hội sẽ thay đổi theo để phản ánh thực tại mới."
+    explanation: "Khi tồn tại xã hội (điều kiện sống, phương thức sản xuất) thay đổi, ý thức xã hội sẽ thay đổi theo để phản ánh thực tại mới.",
+    penaltyMoney: 5
   },
   {
     id: "f2",
@@ -39,7 +40,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Kinh tế không ảnh hưởng tư duy."
     ],
     correctAnswerIndex: 1,
-    explanation: "Ý thức xã hội thường có sự lạc hậu nhất định so với sự biến đổi của tồn tại xã hội."
+    explanation: "Ý thức xã hội thường có sự lạc hậu nhất định so với sự biến đổi của tồn tại xã hội.",
+    penaltyMoney: 5
   },
   {
     id: "f3",
@@ -53,7 +55,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Các yếu tố ngang bằng nhau."
     ],
     correctAnswerIndex: 1,
-    explanation: "Cơ sở hạ tầng vật chất thay đổi làm tiền đề khách quan cho sự thay đổi về nhận thức và tư duy."
+    explanation: "Cơ sở hạ tầng vật chất thay đổi làm tiền đề khách quan cho sự thay đổi về nhận thức và tư duy.",
+    penaltyMoney: 10
   },
   {
     id: "f4",
@@ -67,7 +70,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Thể chế chính trị địa phương."
     ],
     correctAnswerIndex: 1,
-    explanation: "Phương thức sản xuất vật chất là nhân tố quyết định sự tồn tại và phát triển của mọi hình thái ý thức xã hội."
+    explanation: "Phương thức sản xuất vật chất là nhân tố quyết định sự tồn tại và phát triển của mọi hình thái ý thức xã hội.",
+    penaltyMoney: 5
   },
   {
     id: "f5",
@@ -82,7 +86,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
     correctAnswerIndex: 0,
     explanation: "Mặc dù bị quyết định bởi tồn tại, ý thức xã hội (luật pháp) vẫn có tính năng động, tác động trở lại làm biến đổi thực tại.",
-    bonusMoney: 15
+    bonusMoney: 15,
+    penaltyMoney: 10
   },
   {
     id: "f6",
@@ -96,7 +101,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Ý thức con người không bao giờ thay đổi."
     ],
     correctAnswerIndex: 1,
-    explanation: "Môi trường lao động và phương thức sản xuất công nghiệp rèn luyện tính kỷ luật và ý thức tổ chức cho người lao động."
+    explanation: "Môi trường lao động và phương thức sản xuất công nghiệp rèn luyện tính kỷ luật và ý thức tổ chức cho người lao động.",
+    penaltyMoney: 5
   },
   {
     id: "f7",
@@ -110,7 +116,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Giao lưu văn hóa là yếu tố duy nhất tác động."
     ],
     correctAnswerIndex: 2,
-    explanation: "Nhu cầu kinh tế và phương thức kiếm sống mới buộc con người phải cập nhật tri thức và kỹ năng mới."
+    explanation: "Nhu cầu kinh tế và phương thức kiếm sống mới buộc con người phải cập nhật tri thức và kỹ năng mới.",
+    penaltyMoney: 5
   },
   {
     id: "f8",
@@ -124,7 +131,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Hệ thống giáo dục quyết định mọi thói quen con người."
     ],
     correctAnswerIndex: 1,
-    explanation: "Tâm lý xã hội và thói quen cũ thường bám rễ sâu và thay đổi chậm hơn so với điều kiện kinh tế vật chất."
+    explanation: "Tâm lý xã hội và thói quen cũ thường bám rễ sâu và thay đổi chậm hơn so với điều kiện kinh tế vật chất.",
+    penaltyMoney: 10
   },
   {
     id: "f9",
@@ -138,7 +146,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Truyền thông đã thay thế hoàn toàn vai trò của kinh tế."
     ],
     correctAnswerIndex: 2,
-    explanation: "Phương tiện kỹ thuật (thuộc lực lượng sản xuất) là yếu tố vật chất quan trọng thúc đẩy sự thay đổi trong tư duy của thế hệ trẻ."
+    explanation: "Phương tiện kỹ thuật (thuộc lực lượng sản xuất) là yếu tố vật chất quan trọng thúc đẩy sự thay đổi trong tư duy của thế hệ trẻ.",
+    penaltyMoney: 5
   },
   {
     id: "f10",
@@ -152,7 +161,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Chỉ là sự ảnh hưởng nhất thời của mạng xã hội."
     ],
     correctAnswerIndex: 1,
-    explanation: "Cơ cấu kinh tế thay đổi tạo ra những cơ hội và quan điểm mới về công việc và cuộc sống."
+    explanation: "Cơ cấu kinh tế thay đổi tạo ra những cơ hội và quan điểm mới về công việc và cuộc sống.",
+    penaltyMoney: 5
   },
   {
     id: "f11",
@@ -166,7 +176,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Tín ngưỡng không liên quan đến đời sống kinh tế."
     ],
     correctAnswerIndex: 1,
-    explanation: "Ý thức tôn giáo phản ánh một cách hư ảo các điều kiện sống vật chất và sự bất lực của con người trước thiên nhiên trong quá trình sản xuất."
+    explanation: "Ý thức tôn giáo phản ánh một cách hư ảo các điều kiện sống vật chất và sự bất lực của con người trước thiên nhiên trong quá trình sản xuất.",
+    penaltyMoney: 10
   },
   {
     id: "f12",
@@ -180,7 +191,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Ý thức xã hội mang tính độc lập tuyệt đối với vật chất."
     ],
     correctAnswerIndex: 1,
-    explanation: "Phản ứng tâm lý này cho thấy sự chưa thích nghi kịp thời của nhận thức trước những bước tiến nhanh chóng của lực lượng sản xuất."
+    explanation: "Phản ứng tâm lý này cho thấy sự chưa thích nghi kịp thời của nhận thức trước những bước tiến nhanh chóng của lực lượng sản xuất.",
+    penaltyMoney: 5
   },
   {
     id: "f13",
@@ -194,7 +206,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Hoạt động sản xuất không có sự tự do cho cá nhân."
     ],
     correctAnswerIndex: 2,
-    explanation: "Ý thức xã hội tiến bộ có thể định hướng và thúc đẩy tồn tại xã hội vận động theo hướng tích cực hơn."
+    explanation: "Ý thức xã hội tiến bộ có thể định hướng và thúc đẩy tồn tại xã hội vận động theo hướng tích cực hơn.",
+    penaltyMoney: 10
   },
   {
     id: "f14",
@@ -208,7 +221,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Các nghề này hoàn toàn không liên quan đến quy luật kinh tế."
     ],
     correctAnswerIndex: 1,
-    explanation: "Khi các điều kiện vật chất và công cụ lao động mới xuất hiện, con người sẽ hình thành các nhu cầu và hình thức hoạt động mới."
+    explanation: "Khi các điều kiện vật chất và công cụ lao động mới xuất hiện, con người sẽ hình thành các nhu cầu và hình thức hoạt động mới.",
+    penaltyMoney: 5
   },
   {
     id: "f15",
@@ -223,7 +237,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
     correctAnswerIndex: 1,
     explanation: "Thực tiễn lao động trong môi trường hiện đại là trường học tốt nhất để rèn luyện ý thức và kỹ năng cho người lao động.",
-    bonusMoney: 20
+    bonusMoney: 20,
+    penaltyMoney: 15
   },
 
   // --- TUYẾN 2: CÔNG NHÂN HIỆN ĐẠI ---
@@ -239,7 +254,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Đây là một dạng ý thức ảo, không có gốc rễ vật chất thực tế."
     ],
     correctAnswerIndex: 1,
-    explanation: "Sự biến đổi trong phương thức lao động (tồn tại xã hội) là cơ sở nảy sinh những hình thái ý thức mới về đấu tranh và quyền lợi."
+    explanation: "Sự biến đổi trong phương thức lao động (tồn tại xã hội) là cơ sở nảy sinh những hình thái ý thức mới về đấu tranh và quyền lợi.",
+    penaltyMoney: 10
   },
   {
     id: "w2",
@@ -253,7 +269,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Đây là ví dụ của việc tâm lý xã hội vượt trước hệ tư tưởng."
     ],
     correctAnswerIndex: 1,
-    explanation: "Các biến cố về điều kiện sống vật chất (tồn tại xã hội) buộc con người phải thay đổi thói quen và tư duy (ý thức xã hội)."
+    explanation: "Các biến cố về điều kiện sống vật chất (tồn tại xã hội) buộc con người phải thay đổi thói quen và tư duy (ý thức xã hội).",
+    penaltyMoney: 5
   },
   {
     id: "w3",
@@ -267,7 +284,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Công nghệ đã thay thế hoàn toàn vai trò của ý thức con người."
     ],
     correctAnswerIndex: 1,
-    explanation: "Ý thức không thụ động mà có tính tích cực, sáng tạo và có thể tác động trở lại để cải tạo thực tại vật chất qua thực tiễn."
+    explanation: "Ý thức không thụ động mà có tính tích cực, sáng tạo và có thể tác động trở lại để cải tạo thực tại vật chất qua thực tiễn.",
+    penaltyMoney: 10
   },
   {
     id: "w4",
@@ -281,7 +299,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Là sự kế thừa các giá trị tôn giáo từ thời trung cổ."
     ],
     correctAnswerIndex: 1,
-    explanation: "Tính chất của các quan hệ sản xuất và phân phối (tồn tại xã hội) là nền tảng hình thành nên đạo đức và lối sống cộng đồng."
+    explanation: "Tính chất của các quan hệ sản xuất và phân phối (tồn tại xã hội) là nền tảng hình thành nên đạo đức và lối sống cộng đồng.",
+    penaltyMoney: 10
   },
   {
     id: "w5",
@@ -295,7 +314,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Ý thức xã hội luôn mâu thuẫn tuyệt đối với tồn tại xã hội."
     ],
     correctAnswerIndex: 2,
-    explanation: "Khi lực lượng sản xuất phát triển, nó đòi hỏi các quy tắc pháp lý (thượng tầng kiến trúc) phải thay đổi tương ứng để điều chỉnh các quan hệ mới."
+    explanation: "Khi lực lượng sản xuất phát triển, nó đòi hỏi các quy tắc pháp lý (thượng tầng kiến trúc) phải thay đổi tương ứng để điều chỉnh các quan hệ mới.",
+    penaltyMoney: 5
   },
   {
     id: "w6",
@@ -309,7 +329,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Lao động cá nhân không còn đóng góp vào giá trị thặng dư."
     ],
     correctAnswerIndex: 0,
-    explanation: "Công nghệ mới làm thay đổi hình thức biểu hiện của quan hệ sản xuất nhưng không xóa bỏ bản chất của các quan hệ đó."
+    explanation: "Công nghệ mới làm thay đổi hình thức biểu hiện của quan hệ sản xuất nhưng không xóa bỏ bản chất của các quan hệ đó.",
+    penaltyMoney: 5
   },
   {
     id: "w7",
@@ -323,7 +344,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Đây là hiện tượng mang tính ngẫu nhiên, không có tính quy luật."
     ],
     correctAnswerIndex: 1,
-    explanation: "Sự kiểm soát lao động trong thời đại số chuyển dịch sang các công cụ thuật toán, làm đa dạng hóa các quan hệ sản xuất."
+    explanation: "Sự kiểm soát lao động trong thời đại số chuyển dịch sang các công cụ thuật toán, làm đa dạng hóa các quan hệ sản xuất.",
+    penaltyMoney: 5
   },
   {
     id: "w8",
@@ -337,7 +359,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Không có ảnh hưởng gì đáng kể đến đời sống tinh thần."
     ],
     correctAnswerIndex: 1,
-    explanation: "Phương thức lao động mới làm thay đổi các hình thái ý thức xã hội về tính cộng đồng và sự gắn kết truyền thống."
+    explanation: "Phương thức lao động mới làm thay đổi các hình thái ý thức xã hội về tính cộng đồng và sự gắn kết truyền thống.",
+    penaltyMoney: 5
   },
   {
     id: "w9",
@@ -351,7 +374,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Mâu thuẫn giữa ý thức tôn giáo và thực tại vật chất."
     ],
     correctAnswerIndex: 1,
-    explanation: "Sự phát triển của lực lượng sản xuất (nền tảng số) vượt quá khả năng điều chỉnh của các quan hệ sản xuất và pháp lý hiện tại."
+    explanation: "Sự phát triển của lực lượng sản xuất (nền tảng số) vượt quá khả năng điều chỉnh của các quan hệ sản xuất và pháp lý hiện tại.",
+    penaltyMoney: 10
   },
   {
     id: "w10",
@@ -365,7 +389,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Công nghệ sẽ xóa sổ hoàn toàn nhu cầu về ý thức xã hội."
     ],
     correctAnswerIndex: 1,
-    explanation: "Công nghệ là công cụ của lực lượng sản xuất; trong quan hệ sản xuất tư bản, nó thường làm sâu sắc thêm mâu thuẫn giai cấp."
+    explanation: "Công nghệ là công cụ của lực lượng sản xuất; trong quan hệ sản xuất tư bản, nó thường làm sâu sắc thêm mâu thuẫn giai cấp.",
+    penaltyMoney: 15
   },
   {
     id: "w11",
@@ -379,7 +404,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Hành động mang tính cá nhân ích kỷ, không có tính cộng đồng."
     ],
     correctAnswerIndex: 1,
-    explanation: "Ý thức xã hội (ý thức giai cấp) sử dụng các phương tiện vật chất mới (internet) để duy trì và phát triển sức mạnh của mình."
+    explanation: "Ý thức xã hội (ý thức giai cấp) sử dụng các phương tiện vật chất mới (internet) để duy trì và phát triển sức mạnh của mình.",
+    penaltyMoney: 10
   },
   {
     id: "w12",
@@ -393,7 +419,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Công nghệ làm cho lao động trở nên nhẹ nhàng và tự nguyện hơn."
     ],
     correctAnswerIndex: 0,
-    explanation: "Sự phát triển của công cụ lao động (phần mềm) được sử dụng để tối ưu hóa việc bóc lột giá trị thặng dư."
+    explanation: "Sự phát triển của phần mềm theo dõi tiến độ công việc từng phút là một hình thức bóc lột sức lao động trong thời đại số.",
+    penaltyMoney: 5
   },
   {
     id: "w13",
@@ -407,7 +434,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Ý thức con người đã hoàn toàn vượt khỏi các ràng buộc vật chất."
     ],
     correctAnswerIndex: 1,
-    explanation: "Dù hình thức bên ngoài có vẻ tự do, bản chất quan hệ sản xuất vẫn quyết định vị thế thực tế của người lao động."
+    explanation: "Quan hệ sở hữu tư nhân vẫn là yếu tố quyết định tính chất của quan hệ sản xuất và địa vị thực tế của con người.",
+    penaltyMoney: 10
   },
   {
     id: "w14",
@@ -421,7 +449,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Sản phẩm của trí tưởng tượng, không có giá trị vật chất."
     ],
     correctAnswerIndex: 1,
-    explanation: "Dữ liệu trở thành đối tượng lao động và công cụ lao động mới, đóng vai trò quan trọng trong lực lượng sản xuất hiện đại."
+    explanation: "Dữ liệu lớn đóng vai trò là tư liệu sản xuất chủ chốt của cuộc cách mạng công nghiệp lần thứ tư.",
+    penaltyMoney: 15
   },
   {
     id: "w15",
@@ -452,7 +481,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Do ý thức xã hội giới trẻ luôn mang tính phản kháng ngẫu nhiên."
     ],
     correctAnswerIndex: 1,
-    explanation: "Môi trường sống của các thế hệ khác nhau (tồn tại xã hội) tạo ra những hệ giá trị và ưu tiên khác nhau."
+    explanation: "Môi trường sống của các thế hệ khác nhau (tồn tại xã hội) tạo ra những hệ giá trị và ưu tiên khác nhau.",
+    penaltyMoney: 5
   },
   {
     id: "s2",
@@ -466,7 +496,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Ý thức đã tự tạo ra một tồn tại xã hội ảo cho riêng mình."
     ],
     correctAnswerIndex: 1,
-    explanation: "Ý thức xã hội có khả năng vượt trước, phát hiện ra quy luật vận động của tương lai từ ngay trong lòng thực tại."
+    explanation: "Ý thức xã hội có khả năng vượt trước, phát hiện ra quy luật vận động của tương lai từ ngay trong lòng thực tại.",
+    penaltyMoney: 10
   },
   {
     id: "s3",
@@ -480,7 +511,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "AI chỉ là một hình thái tâm lý xã hội mới, không có tác động thực."
     ],
     correctAnswerIndex: 1,
-    explanation: "Khoa học ngày nay đã trở thành lực lượng sản xuất trực tiếp, biến đổi thế giới vật chất thông qua tri thức."
+    explanation: "Khoa học ngày nay đã trở thành lực lượng sản xuất trực tiếp, biến đổi thế giới vật chất thông qua tri thức.",
+    penaltyMoney: 15
   },
   {
     id: "s4",
@@ -494,7 +526,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Sự hội nhập quốc tế làm mờ đi bản sắc tồn tại xã hội trong nước."
     ],
     correctAnswerIndex: 1,
-    explanation: "Cơ sở hạ tầng và cơ chế kinh tế (tồn tại xã hội) thay đổi buộc tâm lý và cách thức hành động của con người phải thay đổi theo."
+    explanation: "Cơ sở hạ tầng và cơ chế kinh tế (tồn tại xã hội) thay đổi buộc tâm lý và cách thức hành động của con người phải thay đổi theo.",
+    penaltyMoney: 5
   },
   {
     id: "s5",
@@ -508,7 +541,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Sự tổng hòa của niềm tin tôn giáo và các văn bản pháp luật."
     ],
     correctAnswerIndex: 2,
-    explanation: "Ý thức xã hội bao gồm hai cấp độ: tâm lý xã hội (thói quen, tình cảm) và hệ tư tưởng xã hội (quan điểm, lý luận)."
+    explanation: "Ý thức xã hội bao gồm hai cấp độ: tâm lý xã hội (thói quen, tình cảm) và hệ tư tưởng xã hội (quan điểm, lý luận).",
+    penaltyMoney: 5
   },
   {
     id: "s6",
@@ -522,7 +556,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Đây chỉ là một hình thức giải trí đơn thuần, không mang tính ý thức."
     ],
     correctAnswerIndex: 1,
-    explanation: "Môi trường thông tin và văn hóa đại chúng (một phần của tồn tại xã hội) định hình nên tâm lý và nhận thức của cá nhân."
+    explanation: "Môi trường thông tin và văn hóa đại chúng (một phần của tồn tại xã hội) định hình nên tâm lý và nhận thức của cá nhân.",
+    penaltyMoney: 5
   },
   {
     id: "s7",
@@ -536,7 +571,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Hành động tự phát không mang tính quy luật của giới trẻ."
     ],
     correctAnswerIndex: 0,
-    explanation: "Sự phát triển của lực lượng sản xuất (công nghệ số) tạo ra những phương thức mới để con người chiếm lĩnh tri thức."
+    explanation: "Sự phát triển của lực lượng sản xuất (công nghệ số) tạo ra những phương thức mới để con người chiếm lĩnh tri thức.",
+    penaltyMoney: 5
   },
   {
     id: "s8",
@@ -550,7 +586,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Sự khác biệt giai cấp chỉ là một định kiến tâm lý cũ kỹ."
     ],
     correctAnswerIndex: 0,
-    explanation: "Dù hình thức có vẻ bình đẳng, nhưng cơ sở kinh tế vật chất vẫn là yếu tố quyết định cơ hội và vị thế thực tế."
+    explanation: "Dù hình thức có vẻ bình đẳng, nhưng cơ sở kinh tế vật chất vẫn là yếu tố quyết định cơ hội và vị thế thực tế.",
+    penaltyMoney: 15
   },
   {
     id: "s9",
@@ -564,7 +601,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Tuyệt đối hóa vai trò của các hình thái ý thức chính trị."
     ],
     correctAnswerIndex: 1,
-    explanation: "Công nghệ không thể giải quyết vấn đề xã hội nếu không thay đổi quan hệ sản xuất đang kìm hãm nó."
+    explanation: "Công nghệ không thể giải quyết vấn đề xã hội nếu không thay đổi quan hệ sản xuất đang kìm hãm nó.",
+    penaltyMoney: 10
   },
   {
     id: "s10",
@@ -578,7 +616,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Quan hệ sản xuất hiện đại không còn dựa trên sự sở hữu."
     ],
     correctAnswerIndex: 1,
-    explanation: "Trong nền kinh tế số, quyền sở hữu các nền tảng và dữ liệu (tư liệu sản xuất) vẫn quyết định quyền lực kinh tế."
+    explanation: "Trong nền kinh tế số, quyền sở hữu các nền tảng và dữ liệu (tư liệu sản xuất) vẫn quyết định quyền lực kinh tế.",
+    penaltyMoney: 15
   },
   {
     id: "s11",
@@ -592,7 +631,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Ý thức con người tự phát sinh mong muốn bảo vệ thiên nhiên."
     ],
     correctAnswerIndex: 1,
-    explanation: "Khi các điều kiện sinh tồn vật chất (tồn tại xã hội) bị đe dọa, ý thức xã hội buộc phải thay đổi để thích nghi."
+    explanation: "Khi các điều kiện sinh tồn vật chất (tồn tại xã hội) bị đe dọa, ý thức xã hội buộc phải thay đổi để thích nghi.",
+    penaltyMoney: 5
   },
   {
     id: "s12",
@@ -606,7 +646,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Sự biến mất của mọi mâu thuẫn giai cấp trong tương lai."
     ],
     correctAnswerIndex: 1,
-    explanation: "Sự phát triển của công cụ lao động (AI) có thể dẫn đến việc thay thế lao động sống, làm thay đổi địa vị của người lao động."
+    explanation: "Sự phát triển của công cụ lao động (AI) có thể dẫn đến việc thay thế lao động sống, làm thay đổi địa vị của người lao động.",
+    penaltyMoney: 15
   },
   {
     id: "s13",
@@ -620,7 +661,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Sự sụp đổ của các quy luật thị trường truyền thống."
     ],
     correctAnswerIndex: 0,
-    explanation: "Lực lượng sản xuất hiện đại mang tính xã hội hóa cao, tạo điều kiện và đòi hỏi những hình thái ý thức cộng đồng phát triển."
+    explanation: "Lực lượng sản xuất hiện đại mang tính xã hội hóa cao, tạo điều kiện và đòi hỏi những hình thái ý thức cộng đồng phát triển.",
+    penaltyMoney: 10
   },
   {
     id: "s14",
@@ -634,7 +676,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Tính kế thừa tuyệt đối không thay đổi của văn hóa."
     ],
     correctAnswerIndex: 0,
-    explanation: "Ý thức xã hội không chỉ thụ động phản ánh tồn tại mà còn có tính năng động, định hướng hành động cải tạo xã hội."
+    explanation: "Ý thức xã hội không chỉ thụ động phản ánh tồn tại mà còn có tính năng động, định hướng hành động cải tạo xã hội.",
+    penaltyMoney: 10
   },
   {
     id: "s15",
@@ -649,7 +692,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
     correctAnswerIndex: 1,
     explanation: "Thực tiễn là tiêu chuẩn của chân lý và là mục đích cuối cùng của mọi lý luận tri thức chân chính.",
-    bonusMoney: 40
+    bonusMoney: 40,
+    penaltyMoney: 25
   },
 
   // --- CÂU HỎI BOSS (CHUNG) ---
@@ -666,6 +710,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
     correctAnswerIndex: 3,
     explanation: "Đây là nội dung then chốt về tính năng động của đời sống tinh thần xã hội.",
-    bonusMoney: 30
+    bonusMoney: 30,
+    penaltyMoney: 50
   }
 ];

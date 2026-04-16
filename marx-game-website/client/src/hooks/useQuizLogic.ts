@@ -105,7 +105,7 @@ export function useQuizLogic(
       const hasGuaranteedBonus = currentQuestion.bonusMoney && currentQuestion.bonusMoney > 0;
       const randomChance = Math.random() > 0.3; // 70% chance
       
-      if (isCorrect && (hasGuaranteedBonus || randomChance)) {
+      if (isCorrect && hasGuaranteedBonus) {
         // Pause here for the card pick game
         setWaitingForBonus(true);
         setIsChecking(false);
@@ -123,7 +123,7 @@ export function useQuizLogic(
         }
       }
     }, 800);
-  }, [currentQuestion, isLastQuestion, isChecking, onBonusEarned, filteredQuestions]);
+  }, [currentQuestion, isLastQuestion, isChecking, onBonusEarned, onPenaltyIncurred, filteredQuestions]);
 
   const completeBonus = useCallback(() => {
     setWaitingForBonus(false);

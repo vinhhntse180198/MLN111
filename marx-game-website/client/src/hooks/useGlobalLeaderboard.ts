@@ -22,7 +22,7 @@ export function useGlobalLeaderboard() {
   // Load from Firebase, sorted by total cumulative score
   useEffect(() => {
     const dbUrl = db.app.options.databaseURL;
-    if (!dbUrl || dbUrl.includes("firebaseio.com")) {
+    if (!dbUrl) {
       console.warn("Global Leaderboard is not configured correctly. Skipping Firebase connection.");
       setLoading(false);
       return;
@@ -125,11 +125,13 @@ export function useGlobalLeaderboard() {
       };
 
       if (roleId === "farmer" || roleId === "worker" || roleId === "student") {
+        // GIẢI PHÁP: Cộng dồn điểm của lần chơi mới vào tổng đã có (Tích lũy tài sản)
+        // Kết hợp với 'Khóa' useRef ở Game.tsx sẽ đảm bảo mỗi lần chơi chỉ cộng 1 lần chuẩn xác
         updated[roleId] = (existing[roleId] || 0) + newScore;
       }
 
-      // Recalculate total from all 3 roles
-      updated.total = updated.farmer + updated.worker + updated.student;
+      // Tính toán lại tổng từ 3 vai trò (vẫn là tổng vì mỗi vai trò là điểm cao nhất của vai trò đó)
+      updated.total = (updated.farmer || 0) + (updated.worker || 0) + (updated.student || 0);
 
       await set(playerRef, updated);
     } catch (e) {
