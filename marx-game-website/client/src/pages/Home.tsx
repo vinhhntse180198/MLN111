@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { markTheoryComplete } from "@/lib/theoryAccess";
 
 const coreIdeas = [
   {
@@ -154,7 +155,10 @@ export default function Home() {
               </p>
             </div>
             <Button
-              onClick={() => setLocation("/game")}
+              onClick={() => {
+                markTheoryComplete();
+                setLocation("/game");
+              }}
               size="sm"
               className="bg-amber-600 text-amber-50 hover:bg-amber-500 font-semibold border-none"
             >
@@ -605,7 +609,10 @@ export default function Home() {
                     className="w-full"
                   >
                     <Button
-                      onClick={() => setLocation("/game")}
+                      onClick={() => {
+                        markTheoryComplete();
+                        setLocation("/game");
+                      }}
                       size="lg"
                       className="game-cta w-full px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg transition-all duration-300 border-none justify-center"
                     >

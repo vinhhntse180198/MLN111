@@ -12,7 +12,7 @@ const firebaseConfig = {
   messagingSenderId: "168861548143",
   appId: "1:168861548143:web:dd8f390fa6dd85166fd79a",
   measurementId: "G-5WS6NGDCJK",
-  databaseURL: "https://mln111-game-default-rtdb.firebaseio.com"
+  databaseURL: "https://mln111-game-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
 // Initialize Firebase

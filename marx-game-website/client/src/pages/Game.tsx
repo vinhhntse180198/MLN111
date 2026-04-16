@@ -299,6 +299,35 @@ export default function Game() {
   const progressValue = (completedRounds / scenarios.length) * 100;
   const activeScenario = scenarios[currentRound];
 
+  // Dynamic Header Labels
+  const systemFrameLabel = 
+    gameState === "registration" ? "Hệ quy chiếu" :
+    gameState === "character-select" ? "Hồ sơ" :
+    selectedCharacter ? "Chủ thể" : "Định danh";
+
+  const systemFrameValue = 
+    gameState === "registration" ? "Triết học Mác - Lênin" :
+    selectedCharacter ? selectedCharacter.name : "Đang phân tích...";
+
+  const stateLabel = 
+    gameState === "registration" ? "Trạng thái" : "Mô phỏng";
+
+  const stateValue = 
+    gameState === "registration" ? "Khai báo" :
+    gameState === "character-select" ? "Phân tích hồ sơ" :
+    gameState === "quiz" ? "Kiểm soát nhận thức" :
+    gameState === "playing" ? "Vận động lịch sử" : "Kết thúc vòng lặp";
+
+  const progressLabel = 
+    gameState === "quiz" ? "Nhận thức" : "Chương";
+
+  const progressValueText = 
+    gameState === "registration" ? "Khởi tạo: 0%" :
+    gameState === "character-select" ? "Chọn nguồn gốc" :
+    gameState === "quiz" ? `${currentQuestionIndex + 1}/${totalQuestions}` :
+    gameState === "playing" ? `${currentRound + 1}: ${activeScenario?.title?.split(':')[0] || activeScenario?.title}` :
+    "Hoàn tất";
+
   return (
     <div className="game-shell">
       <div className="game-backdrop" />
@@ -324,15 +353,7 @@ export default function Game() {
                   <ArrowLeft className="h-4 w-4" />
                   Lý luận Nền tảng
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setLocation("/ly-thuyet")}
-                  className="border-amber-300/20 bg-white/5 text-amber-50 hover:bg-white/10"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  Xem lại lý thuyết
-                </Button>
+
               </div>
               <div className="space-y-2">
                 <h1 className="game-title">Đời sống quyết định ý thức</h1>
@@ -344,26 +365,60 @@ export default function Game() {
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[420px]">
+            <div className="grid gap-3 sm:grid-cols-1 md:grid-cols-3 lg:min-w-[500px]">
               <div className="game-chip">
-                <span className="game-chip-label">Hệ quy chiếu</span>
-                <span className="game-chip-value">Triết học Mác - Lênin</span>
+                <span className="game-chip-label">{systemFrameLabel}</span>
+                <div className="overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={systemFrameValue}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="block game-chip-value"
+                    >
+                      {systemFrameValue}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
               </div>
+
               <div className="game-chip">
-                <span className="game-chip-label">Trạng thái</span>
-                <span className="game-chip-value">
-                  {gameState === "registration" && "Khai báo"}
-                  {gameState === "character-select" && "Chọn hồ sơ"}
-                  {gameState === "quiz" && "Kiểm tra kiến thức"}
-                  {gameState === "playing" && "Đang vận hành"}
-                  {gameState === "ended" && "Tổng kết"}
-                </span>
+                <span className="game-chip-label">{stateLabel}</span>
+                <div className="overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={stateValue}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="block game-chip-value"
+                    >
+                      {stateValue}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
               </div>
+
               <div className="game-chip">
-                <span className="game-chip-label">Tiến độ</span>
-                <span className="game-chip-value">
-                  {gameState === "quiz" ? `${currentQuestionIndex + 1}/${totalQuestions} câu` : `${completedRounds}/${scenarios.length} chương`}
-                </span>
+                <span className="game-chip-label">{progressLabel}</span>
+                <div className="overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={progressValueText}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="block truncate game-chip-value"
+                      title={progressValueText}
+                    >
+                      {progressValueText}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
           </div>
@@ -373,57 +428,115 @@ export default function Game() {
           {gameState === "registration" && (
             <motion.div
               key="registration"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="flex min-h-[50vh] flex-col items-center justify-center space-y-8 py-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              className="relative flex min-h-[65vh] flex-col items-center justify-center p-4"
             >
-              <div className="text-center space-y-4">
-                <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 text-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-                  <Users className="h-8 w-8" />
-                </div>
-                <h2 className="text-3xl font-bold tracking-tight text-stone-50 md:text-4xl">
-                  Xác minh Danh tính
-                </h2>
-                <p className="max-w-md mx-auto text-sm leading-7 text-stone-400">
-                  Chào mừng bạn đến với hệ thống mô phỏng vận động lịch sử. Hãy nhập bí danh của bạn để bắt đầu xây dựng hồ sơ tư tưởng.
-                </p>
+              {/* Decorative Background Elements for Intro */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[120px]" />
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
               </div>
 
-              <div className="w-full max-w-md">
-                <div className="game-panel game-panel-glow p-8">
-                  <form 
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const formData = new FormData(e.currentTarget);
-                      const name = formData.get("playerName") as string;
-                      if (name.trim()) register(name);
+              <div className="relative z-10 w-full max-w-2xl text-center space-y-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="space-y-6"
+                >
+                  <motion.div 
+                    animate={{ 
+                      boxShadow: ["0 0 20px rgba(245,158,11,0.1)", "0 0 40px rgba(245,158,11,0.2)", "0 0 20px rgba(245,158,11,0.1)"],
+                      borderColor: ["rgba(245,158,11,0.2)", "rgba(245,158,11,0.4)", "rgba(245,158,11,0.2)"]
                     }}
-                    className="space-y-6"
+                    transition={{ duration: 4, repeat: Infinity }}
+                    className="inline-flex h-20 w-20 items-center justify-center rounded-3xl border border-amber-500/20 bg-amber-500/5 text-amber-500 mb-4"
                   >
-                    <div className="space-y-3">
-                      <label htmlFor="playerName" className="text-xs font-bold uppercase tracking-[0.3em] text-amber-200/50">
-                        Định danh Chủ thể
-                      </label>
-                      <input
-                        id="playerName"
-                        name="playerName"
-                        type="text"
-                        required
-                        autoFocus
-                        maxLength={20}
-                        placeholder="Nhập tên của bạn..."
-                        className="w-full rounded-xl border border-stone-800 bg-stone-900/50 p-4 text-stone-100 placeholder:text-stone-700 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all font-sans"
-                      />
-                    </div>
-                    <Button type="submit" size="lg" className="game-cta w-full bg-amber-500 hover:bg-amber-600">
-                      Bắt đầu hành trình <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </form>
-                </div>
-                <p className="mt-8 text-center text-[10px] uppercase tracking-[0.4em] text-stone-600">
-                  Tiến trình sẽ được lưu cục bộ trên trình duyệt
-                </p>
+                    <Users className="h-10 w-10" />
+                  </motion.div>
+                  
+                  <div className="space-y-4">
+                    <motion.h2 
+                      initial={{ opacity: 0, letterSpacing: "0.2em" }}
+                      animate={{ opacity: 1, letterSpacing: "0em" }}
+                      transition={{ duration: 1, delay: 0.2 }}
+                      className="text-4xl md:text-6xl font-black tracking-tight text-white uppercase"
+                    >
+                      Xác minh <span className="text-amber-500">Chủ thể</span>
+                    </motion.h2>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                      className="max-w-lg mx-auto text-stone-400 text-base md:text-lg leading-relaxed font-medium"
+                    >
+                      Hệ thống đã sẵn sàng để mô phỏng tiến trình vận động lịch sử. 
+                      Hãy thiết lập định danh của bạn để bắt đầu.
+                    </motion.p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  className="w-full max-w-md mx-auto"
+                >
+                  <div className="game-panel p-8 md:p-10 border-amber-500/10 bg-stone-900/40 backdrop-blur-xl relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-amber-500/50 scale-y-0 group-focus-within:scale-y-100 transition-transform duration-500 origin-top" />
+                    
+                    <form 
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const formData = new FormData(e.currentTarget);
+                        const name = formData.get("playerName") as string;
+                        if (name.trim()) register(name);
+                      }}
+                      className="space-y-8"
+                    >
+                      <div className="space-y-4 text-left">
+                        <label htmlFor="playerName" className="block text-[10px] font-black uppercase tracking-[0.5em] text-amber-500/50 ml-1">
+                          Bí danh Hệ thống
+                        </label>
+                        <div className="relative">
+                          <input
+                            id="playerName"
+                            name="playerName"
+                            type="text"
+                            required
+                            autoFocus
+                            maxLength={20}
+                            placeholder="Nhập tên của bạn..."
+                            className="w-full bg-transparent border-b-2 border-stone-800 py-4 px-1 text-2xl font-bold text-white placeholder:text-stone-700 focus:border-amber-500 focus:outline-none transition-all duration-300"
+                          />
+                          <div className="absolute bottom-0 left-0 h-0.5 bg-amber-500 w-0 focus-within:w-full transition-all duration-500" />
+                        </div>
+                      </div>
+
+                      <Button 
+                        type="submit" 
+                        size="lg" 
+                        className="game-cta w-full h-16 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-lg uppercase tracking-widest shadow-[0_10px_30px_rgba(245,158,11,0.2)]"
+                      >
+                        Khởi chạy Mô phỏng <ChevronRight className="ml-2 h-6 w-6" />
+                      </Button>
+                    </form>
+                  </div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.5 }}
+                    className="mt-8 flex items-center justify-center gap-4 text-[9px] uppercase tracking-[0.4em] text-stone-600 font-bold"
+                  >
+                    <div className="h-px w-8 bg-stone-800" />
+                    Dữ liệu được mã hóa cục bộ
+                    <div className="h-px w-8 bg-stone-800" />
+                  </motion.div>
+                </motion.div>
               </div>
             </motion.div>
           )}
