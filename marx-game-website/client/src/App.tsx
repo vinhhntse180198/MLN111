@@ -8,12 +8,15 @@ import Game from "./pages/Game";
 import Home from "./pages/Home";
 import Theory from "./pages/Theory";
 
+
+
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/ly-thuyet" component={Theory} />
       <Route path="/game" component={Game} />
+
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

@@ -10,6 +10,7 @@ import {
   Sparkles,
   Home,
   RotateCcw,
+  GraduationCap
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
@@ -59,6 +60,10 @@ export default function Theory() {
   }, []);
 
   const handleStartGame = () => {
+    // Clear previous simulation identity and progress for a fresh start
+    localStorage.removeItem("rpg_player_name");
+    localStorage.removeItem("gameState");
+    localStorage.removeItem("selectedCharacter");
     markTheoryComplete();
     setLocation("/game");
   };
@@ -233,7 +238,7 @@ export default function Theory() {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          className={`grid gap-4 ${isGameInProgress ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
           <Button
             variant="outline"
@@ -242,8 +247,10 @@ export default function Theory() {
             className="border-amber-300/20 bg-white/5 text-amber-50 hover:bg-white/10"
           >
             <ArrowLeft className="h-4 w-4" />
-            Quay lại trang 1
+            Trang 1
           </Button>
+
+
 
           {isGameInProgress && (
             <Button
@@ -257,7 +264,7 @@ export default function Theory() {
           )}
 
           <Button onClick={handleStartGame} size="lg" className="game-cta">
-            Tôi đã hiểu, vào chơi
+            Bắt đầu chơi
             <Play className="h-4 w-4" />
           </Button>
         </motion.section>

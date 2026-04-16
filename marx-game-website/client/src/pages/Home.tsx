@@ -11,6 +11,7 @@ import {
   Zap,
   Link2,
   Play,
+  GraduationCap
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";

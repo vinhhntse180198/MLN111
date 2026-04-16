@@ -722,4 +722,68 @@
       border-radius: 14px;
     }
   }
+
+  /* RPG Result Specific Styling */
+  .rank-display {
+    @apply font-black italic relative;
+    font-family: "Playfair Display", serif;
+    font-size: 8rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 20px currentColor);
+  }
+
+  .rank-s { @apply text-amber-400 drop-shadow-[0_0_30px_rgba(251,191,36,0.5)]; }
+  .rank-a { @apply text-stone-200 drop-shadow-[0_0_25px_rgba(231,229,228,0.4)]; }
+  .rank-b { @apply text-orange-400 drop-shadow-[0_0_20px_rgba(251,146,60,0.3)]; }
+  .rank-c { @apply text-stone-400 drop-shadow-[0_0_15px_rgba(168,162,158,0.2)]; }
+  .rank-d { @apply text-stone-500; }
+
+  .rpg-result-card {
+    @apply relative overflow-hidden bg-stone-900/40 border border-white/5 rounded-[40px] p-8;
+    background: radial-gradient(circle at top right, rgba(251, 191, 36, 0.05), transparent 40%),
+                rgba(25, 20, 22, 0.9);
+  }
+
+  .reward-pill {
+    @apply flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-500;
+  }
+
+  .reward-pill-gold {
+    @apply bg-amber-500/10 border-amber-500/20 text-amber-400;
+  }
+
+  .reward-pill-active {
+    @apply scale-105 border-amber-500/50 bg-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.2)];
+  }
+
+  .neon-text {
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float-slow 3s ease-in-out infinite;
+  }
+
+  /* 3D Transform Utilities for Card Flip */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .text-shadow-glow {
+    text-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+  }
 }
+

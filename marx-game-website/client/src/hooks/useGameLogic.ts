@@ -204,8 +204,15 @@ const SCENARIOS: Scenario[] = [
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<
-    "character-select" | "playing" | "ended"
-  >("character-select");
+    "registration" | "character-select" | "quiz" | "playing" | "ended"
+  >(() => {
+    // Start at registration if no name exists in localStorage
+    return localStorage.getItem("rpg_player_name") ? "character-select" : "registration";
+  });
+  
+  const [playerName, setPlayerName] = useState<string>(() => {
+    return localStorage.getItem("rpg_player_name") || "";
+  });
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
     null
   );
@@ -213,6 +220,15 @@ export function useGameLogic() {
   const [currentRound, setCurrentRound] = useState(0);
   const [history, setHistory] = useState<GameHistory[]>([]);
   const [lastFeedback, setLastFeedback] = useState("");
+
+  const register = useCallback((name: string) => {
+    const trimmedName = name.trim();
+    if (trimmedName) {
+      setPlayerName(trimmedName);
+      localStorage.setItem("rpg_player_name", trimmedName);
+      setGameState("character-select");
+    }
+  }, []);
 
   const selectCharacter = useCallback((charId: string) => {
     const character = CHARACTERS.find((item) => item.id === charId);
@@ -226,7 +242,22 @@ export function useGameLogic() {
     setCurrentRound(0);
     setHistory([]);
     setLastFeedback("");
+    setGameState("quiz");
+  }, []);
+
+  const startPlaying = useCallback((quizScore: number) => {
+    // Money is now added real-time during the quiz via addMoney callback
     setGameState("playing");
+  }, []);
+
+  const addMoney = useCallback((amount: number) => {
+    setStats(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        money: prev.money + amount
+      };
+    });
   }, []);
 
   const makeChoice = useCallback(
@@ -268,7 +299,19 @@ export function useGameLogic() {
   );
 
   const resetGame = useCallback(() => {
+    // Keep the player name but reset progress
     setGameState("character-select");
+    setSelectedCharacter(null);
+    setStats(null);
+    setCurrentRound(0);
+    setHistory([]);
+    setLastFeedback("");
+  }, []);
+
+  const changeIdentity = useCallback(() => {
+    localStorage.removeItem("rpg_player_name");
+    setPlayerName("");
+    setGameState("registration");
     setSelectedCharacter(null);
     setStats(null);
     setCurrentRound(0);
@@ -278,6 +321,7 @@ export function useGameLogic() {
 
   return {
     gameState,
+    playerName,
     selectedCharacter,
     stats,
     currentRound,
@@ -285,8 +329,12 @@ export function useGameLogic() {
     lastFeedback,
     scenarios: SCENARIOS,
     characters: CHARACTERS,
+    register,
     selectCharacter,
     makeChoice,
+    startPlaying,
+    addMoney,
     resetGame,
+    changeIdentity,
   };
 }
