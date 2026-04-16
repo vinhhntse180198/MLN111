@@ -1095,6 +1095,17 @@ export default function Game() {
                                   <Trophy className="mr-2 h-4 w-4" />
                                   Xem Bảng Vàng
                                 </Button>
+                                <Button 
+                                  onClick={() => {
+                                    resetGame();
+                                    setLocation("/");
+                                  }} 
+                                  variant="ghost" 
+                                  className="text-stone-500 hover:text-stone-300 hover:bg-white/5"
+                                >
+                                  <Home className="mr-2 h-4 w-4" />
+                                  Về Trang chủ
+                                </Button>
                               </div>
                             </div>
                           </div>
