@@ -10,6 +10,7 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
   const [answers, setAnswers] = useState<number[]>([]);
   const [score, setScore] = useState(0);
   const [waitingForBonus, setWaitingForBonus] = useState(false);
+  const [showContextIntro, setShowContextIntro] = useState(false);
 
   // Filter questions based on roleId if provided, otherwise show all
   const filteredQuestions = useMemo(() => {
@@ -29,7 +30,27 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
   }, [roleId]);
 
 
-  const currentQuestion = filteredQuestions[currentQuestionIndex];
+  const currentQuestionRaw = filteredQuestions[currentQuestionIndex];
+  
+  const currentQuestion = useMemo(() => {
+    if (!currentQuestionRaw) return currentQuestionRaw;
+    
+    const options = [...currentQuestionRaw.options];
+    const correctOption = options[currentQuestionRaw.correctAnswerIndex];
+    
+    // Fisher-Yates shuffle
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    
+    return {
+      ...currentQuestionRaw,
+      options,
+      correctAnswerIndex: options.indexOf(correctOption)
+    };
+  }, [currentQuestionRaw]);
+
   const isLastQuestion = currentQuestionIndex === filteredQuestions.length - 1;
 
   const [isChecking, setIsChecking] = useState(false);
@@ -42,7 +63,8 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
     setScore(0);
     setIsChecking(false);
     setLastSelected(null);
-  }, []);
+    setShowContextIntro(!!filteredQuestions[0]?.context);
+  }, [filteredQuestions]);
 
   const submitAnswer = useCallback((answerIndex: number) => {
     if (isChecking) return;
@@ -75,20 +97,28 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
         if (isLastQuestion) {
           setQuizState("results");
         } else {
-          setCurrentQuestionIndex(prev => prev + 1);
+          setCurrentQuestionIndex(prev => {
+            const nextIdx = prev + 1;
+            setShowContextIntro(!!filteredQuestions[nextIdx]?.context);
+            return nextIdx;
+          });
         }
       }
     }, 800);
-  }, [currentQuestion, isLastQuestion, isChecking, onBonusEarned]);
+  }, [currentQuestion, isLastQuestion, isChecking, onBonusEarned, filteredQuestions]);
 
   const completeBonus = useCallback(() => {
     setWaitingForBonus(false);
     if (isLastQuestion) {
       setQuizState("results");
     } else {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex(prev => {
+        const nextIdx = prev + 1;
+        setShowContextIntro(!!filteredQuestions[nextIdx]?.context);
+        return nextIdx;
+      });
     }
-  }, [isLastQuestion]);
+  }, [isLastQuestion, filteredQuestions]);
 
   const resetQuiz = useCallback(() => {
     setQuizState("intro");
@@ -97,6 +127,11 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
     setScore(0);
     setIsChecking(false);
     setLastSelected(null);
+    setShowContextIntro(false);
+  }, []);
+
+  const continueToQuestion = useCallback(() => {
+    setShowContextIntro(false);
   }, []);
 
   return {
@@ -114,6 +149,8 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
     questions: filteredQuestions,
     isChecking,
     lastSelected,
-    waitingForBonus
+    waitingForBonus,
+    showContextIntro,
+    continueToQuestion
   };
 };

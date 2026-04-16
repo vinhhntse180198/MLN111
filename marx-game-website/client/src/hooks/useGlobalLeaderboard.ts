@@ -22,7 +22,7 @@ export function useGlobalLeaderboard() {
     const scoresRef = ref(db, "scores");
     const topScoresQuery = query(scoresRef, orderByChild("scoreRatio"), limitToLast(50));
 
-    const unsubscribe = onValue(scoresRef, (snapshot) => {
+    const unsubscribe = onValue(topScoresQuery, (snapshot) => {
       const data = snapshot.val();
       const playerEntries: LeaderboardEntry[] = [];
       

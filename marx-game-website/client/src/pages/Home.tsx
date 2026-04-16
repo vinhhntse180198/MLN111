@@ -40,6 +40,21 @@ const presentationOutline = [
   "Khi hoàn cảnh thay đổi, ý thức cũng có thể vận động và biến đổi theo.",
 ];
 
+const demoFlow = [
+  {
+    title: "Bước 1",
+    body: "Chọn nhân vật có xuất phát điểm khác nhau để cho thấy điều kiện vật chất ban đầu không giống nhau.",
+  },
+  {
+    title: "Bước 2",
+    body: "Theo dõi các biến đổi ở tiền bạc, môi trường và quan hệ trước khi tư duy, niềm tin thay đổi.",
+  },
+  {
+    title: "Bước 3",
+    body: "Kết nối phần tổng kết cuối game với luận điểm triết học đã trình bày ở trên.",
+  },
+];
+
 const basicElements = [
   {
     title: "Điều kiện tự nhiên",
@@ -563,51 +578,48 @@ export default function Home() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-8">
                     Hiện thực hóa Vận động
                   </p>
-                  <h2 className="text-4xl md:text-5xl font-bold leading-tight text-amber-50 mb-6">
-                    Khi nền lý thuyết đã rõ, trang tiếp theo sẽ trả lời: game
-                    minh họa điều này như thế nào?
+                  <h2 className="text-3xl md:text-4xl font-bold leading-tight text-amber-50 mb-6">
+                    Mô phỏng: Game minh họa điều này như thế nào?
                   </h2>
-                  <div className="space-y-4 text-sm leading-relaxed text-stone-400">
+                  <div className="space-y-4 mb-8 text-sm leading-relaxed text-stone-400">
                     <p>
-                      Sau khi đã nắm vững các nguyên lý cơ bản, chúng ta sẽ chuyển sang phần mô phỏng 
-                      để quan sát sự vận động này trong những tình huống cụ thể.
+                      Game không giảng lý thuyết bằng chữ, mà cho bạn thấy sự vận động đó qua các lựa chọn:
                     </p>
-                    <p>
-                      Hãy chuẩn bị tâm thế để đối mặt với những biến chuyển của hoàn cảnh và xem chúng 
-                      thay đổi ý chí con người như thế nào.
-                    </p>
+                    <div className="mt-5 space-y-4">
+                      {demoFlow.map(item => (
+                        <div key={item.title} className="game-chip">
+                          <span className="game-chip-label">{item.title}</span>
+                          <span className="game-chip-value">{item.body}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
                 <div
-                  className={`flex flex-col ${isGameInProgress ? "md:flex-row" : ""} gap-4 items-start md:items-center`}
+                  className={`flex flex-col gap-4 items-start`}
                 >
-                  {isGameInProgress && (
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Button
-                        onClick={() => setLocation("/game")}
-                        size="lg"
-                        className="w-full md:w-auto px-8 py-3 bg-amber-700 hover:bg-amber-600 text-white font-semibold rounded-lg transition-all duration-300 border-none"
-                      >
-                        <Play className="h-5 w-5 mr-2" />
-                        Tiếp tục chơi
-                      </Button>
-                    </motion.div>
-                  )}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    className="w-full"
                   >
                     <Button
-                      onClick={() => setLocation("/ly-thuyet")}
+                      onClick={() => setLocation("/game")}
                       size="lg"
-                      className="game-cta w-full md:w-auto px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg transition-all duration-300 border-none"
+                      className="game-cta w-full px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg transition-all duration-300 border-none justify-center"
                     >
-                      Bắt đầu chơi game
-                      <ArrowRight className="h-5 w-5 ml-2" />
+                      {isGameInProgress ? (
+                        <>
+                          <Play className="h-5 w-5 mr-2" />
+                          Tiếp tục chơi ván hiện tại
+                        </>
+                      ) : (
+                        <>
+                          Bắt đầu chơi
+                          <ArrowRight className="h-5 w-5 ml-2" />
+                        </>
+                      )}
                     </Button>
                   </motion.div>
                 </div>

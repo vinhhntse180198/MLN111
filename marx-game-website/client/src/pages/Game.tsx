@@ -232,6 +232,7 @@ export default function Game() {
     characters,
     register,
     selectCharacter,
+    startQuizPhase,
     makeChoice,
     startPlaying,
     addMoney,
@@ -254,7 +255,9 @@ export default function Game() {
     isChecking,
     lastSelected,
     waitingForBonus,
-    completeBonus
+    completeBonus,
+    showContextIntro,
+    continueToQuestion
   } = useQuizLogic(selectedCharacter?.id, (amount) => {
     addMoney(amount);
     setBonusNotice({ amount, id: Date.now() });
@@ -495,6 +498,81 @@ export default function Game() {
             </motion.section>
           )}
 
+          {gameState === "character-intro" && selectedCharacter && (
+            <motion.div
+              key="character-intro"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              transition={{ duration: 0.8 }}
+              className="relative flex min-h-[70vh] flex-col items-center justify-center py-12"
+            >
+              <div className="absolute inset-0 max-w-5xl mx-auto opacity-20 pointer-events-none overflow-hidden">
+                 <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[100px] ${
+                    getCharacterProfile(selectedCharacter).color === 'amber' ? 'bg-amber-600' : 
+                    getCharacterProfile(selectedCharacter).color === 'blue' ? 'bg-blue-600' : 'bg-stone-600'
+                 }`} />
+              </div>
+
+              <div className="w-full max-w-3xl z-10 text-center">
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 1 }}
+                  className="space-y-6"
+                >
+                  <div className="inline-flex h-24 w-24 items-center justify-center rounded-2xl border bg-stone-900/80 backdrop-blur-sm border-stone-700/50 text-stone-100 shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-4">
+                    <span className="scale-150 opacity-80">{getCharacterProfile(selectedCharacter).icon}</span>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.4em] text-stone-400 font-bold">Hồ sơ đã chọn</p>
+                    <h2 className="text-5xl font-black text-white tracking-tight uppercase">
+                      {selectedCharacter.name}
+                    </h2>
+                  </div>
+
+                  <div className="w-16 h-1 bg-stone-700/50 mx-auto my-8" />
+
+                  <p className="text-xl md:text-2xl leading-relaxed text-stone-300 font-serif italic max-w-2xl mx-auto px-4">
+                    "{selectedCharacter.description}"
+                  </p>
+                  
+                  <div className="grid grid-cols-2 max-w-md mx-auto gap-4 mt-8 text-left bg-stone-900/50 backdrop-blur-md p-6 rounded-2xl border border-stone-800/50">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">Môi trường gốc</p>
+                      <p className="font-semibold text-stone-200">{selectedCharacter.initialStats.env}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">Tài sản ban đầu</p>
+                      <p className="font-semibold text-stone-200">{selectedCharacter.initialStats.money} điểm</p>
+                    </div>
+                  </div>
+
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.5, duration: 1 }}
+                  className="mt-12"
+                >
+                  <Button 
+                    onClick={startQuizPhase}
+                    size="lg" 
+                    className={`h-14 px-8 text-lg font-bold uppercase tracking-widest transition-all hover:scale-105 shadow-xl ${
+                      getCharacterProfile(selectedCharacter).color === 'amber' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-amber-500/20' : 
+                      getCharacterProfile(selectedCharacter).color === 'blue' ? 'bg-blue-600 hover:bg-blue-500 text-stone-50 shadow-blue-500/20' : 
+                      'bg-stone-200 hover:bg-stone-100 text-stone-950 shadow-stone-200/20'
+                    }`}
+                  >
+                    Khởi động Cuộc đời <ChevronRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+
           {(gameState === "quiz" || gameState === "playing") && selectedCharacter && stats && (
             <motion.section
               key="game-active"
@@ -626,24 +704,47 @@ export default function Game() {
                 {gameState === "quiz" ? (
                   <div className="space-y-6">
                     {quizState === "questions" && (
-                      <div className="space-y-6">
-                        <div className="game-panel game-panel-glow">
-                          <div className="flex items-center justify-between mb-4">
-                            <Badge className="game-badge">Kiểm tra kiến thức</Badge>
-                            <span className="text-xs uppercase tracking-widest text-amber-200/50">Phần kiểm tra tư duy</span>
-                          </div>
-                          
-                          {currentQuestion.context && (
-                            <div className="mb-6 rounded-xl bg-amber-500/5 p-5 border border-amber-500/10">
-                              <p className="text-sm italic leading-relaxed text-amber-100/80">
-                                <span className="mr-2 not-italic font-bold tracking-wider text-amber-500/60 uppercase text-[10px]">Bối cảnh lịch sử</span>
-                                {currentQuestion.context}
+                      <>
+                        {showContextIntro ? (
+                          <motion.div 
+                            key="context-intro"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="flex flex-col items-center justify-center min-h-[400px] text-center space-y-8 bg-stone-900/80 p-8 rounded-3xl border border-amber-500/20 shadow-[0_0_50px_rgba(245,158,11,0.05)] relative overflow-hidden"
+                          >
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 blur-[100px] -mr-32 -mt-32 pointer-events-none" />
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/10 blur-[100px] -ml-32 -mb-32 pointer-events-none" />
+                            
+                            <BookOpen className="w-12 h-12 text-amber-500/50 mb-2" />
+                            
+                            <div className="space-y-4 max-w-2xl z-10">
+                              <p className="text-sm font-bold tracking-[0.4em] text-amber-500/80 uppercase">
+                                Bối cảnh lịch sử
                               </p>
+                              <h3 className="text-2xl md:text-3xl font-serif italic text-amber-100 leading-relaxed font-semibold">
+                                "{currentQuestion.context}"
+                              </h3>
                             </div>
-                          )}
-                          
-                          <h3 className="text-xl font-semibold leading-relaxed text-stone-100 md:text-2xl flex items-center justify-between gap-3">
-                            <span>{currentQuestion.question}</span>
+
+                            <Button 
+                              onClick={continueToQuestion}
+                              size="lg"
+                              className="mt-8 bg-amber-500 text-stone-950 hover:bg-amber-400 font-bold uppercase tracking-widest px-8 rounded-xl z-10 shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all"
+                            >
+                              Tiếp tục <ChevronRight className="ml-2 w-5 h-5" />
+                            </Button>
+                          </motion.div>
+                        ) : (
+                        <div className="space-y-6">
+                          <div className="game-panel game-panel-glow">
+                            <div className="flex items-center justify-between mb-4">
+                              <Badge className="game-badge">Kiểm tra kiến thức</Badge>
+                              <span className="text-xs uppercase tracking-widest text-amber-200/50">Phần kiểm tra tư duy</span>
+                            </div>
+                            
+                            <h3 className="text-xl font-semibold leading-relaxed text-stone-100 md:text-2xl flex items-center justify-between gap-3">
+                              <span>{currentQuestion.question}</span>
                             {currentQuestion.bonusMoney && (
                               <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 animate-pulse whitespace-nowrap">
                                 <History className="h-3 w-3 mr-1" />
@@ -729,6 +830,9 @@ export default function Game() {
                         </div>
                       </div>
                     )}
+                  </>
+                )}
+
 
                     {quizState === "results" && (
                       <motion.div 
@@ -759,18 +863,25 @@ export default function Game() {
                               >
                                 {(() => {
                                   const percent = (score / totalQuestions) * 100;
-                                  if (percent >= 100) return "Đỉnh cao Biện chứng";
-                                  if (percent >= 80) return "Chủ thể Tiên phong";
-                                  if (percent >= 60) return "Nhận thức Tích cực";
-                                  if (percent >= 40) return "Bước đầu Trải nghiệm";
-                                  return "Giai đoạn Tìm tòi";
+                                  if (percent >= 100) return "S";
+                                  if (percent >= 80) return "A";
+                                  if (percent >= 60) return "B";
+                                  if (percent >= 40) return "C";
+                                  return "D";
                                 })()}
                               </motion.div>
                               
                               <div className="text-center">
                                 <p className="text-[10px] uppercase tracking-[0.4em] text-amber-200/50 mb-1">Cấp độ Nhận thức</p>
                                 <h2 className="text-2xl font-black text-stone-50 uppercase tracking-widest">
-                                  {score === totalQuestions ? "Vĩ nhân Tư tưởng" : score >= totalQuestions/2 ? "Chủ thể Xuất sắc" : "Nỗ lực Chuyển hóa"}
+                                  {(() => {
+                                    const percent = (score / totalQuestions) * 100;
+                                    if (percent >= 100) return "Đỉnh cao Biện chứng";
+                                    if (percent >= 80) return "Chủ thể Tiên phong";
+                                    if (percent >= 60) return "Nhận thức Tích cực";
+                                    if (percent >= 40) return "Bước đầu Trải nghiệm";
+                                    return "Giai đoạn Tìm tòi";
+                                  })()}
                                 </h2>
                                 <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 border border-white/10">
                                   <span className="text-xl font-bold text-amber-400">{score}</span>

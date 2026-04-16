@@ -204,11 +204,8 @@ const SCENARIOS: Scenario[] = [
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<
-    "registration" | "character-select" | "quiz" | "playing" | "ended"
-  >(() => {
-    // Start at registration if no name exists in localStorage
-    return localStorage.getItem("rpg_player_name") ? "character-select" : "registration";
-  });
+    "registration" | "character-select" | "character-intro" | "quiz" | "playing" | "ended"
+  >("registration");
   
   const [playerName, setPlayerName] = useState<string>(() => {
     return localStorage.getItem("rpg_player_name") || "";
@@ -242,6 +239,10 @@ export function useGameLogic() {
     setCurrentRound(0);
     setHistory([]);
     setLastFeedback("");
+    setGameState("character-intro");
+  }, []);
+
+  const startQuizPhase = useCallback(() => {
     setGameState("quiz");
   }, []);
 
@@ -332,6 +333,7 @@ export function useGameLogic() {
     characters: CHARACTERS,
     register,
     selectCharacter,
+    startQuizPhase,
     makeChoice,
     startPlaying,
     addMoney,
