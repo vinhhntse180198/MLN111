@@ -22,11 +22,12 @@ import {
   Factory,
   Users,
   Trophy,
-  Zap,
-  Sparkles
+  Sparkles,
+  History,
+  ArrowLeft
 } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { useLeaderboard } from "@/hooks/useLeaderboard";
+import { useGlobalLeaderboard } from "@/hooks/useGlobalLeaderboard";
 import { useLocation } from "wouter";
 
 function SectionTitle({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -73,22 +74,19 @@ function StatRow({ label, value, max, icon, variant = "amber" }: { label: string
 
 const characterProfiles = {
   farmer: {
-    codename: "H5-01",
-    role: "Tuyến nông thôn",
+    role: "Nông dân",
     trait: "Bền bỉ, sống sót cộng đồng",
     icon: <Users className="h-4 w-4" />,
     color: "amber" as const,
   },
   worker: {
-    codename: "W2-02",
-    role: "Tuyến công nhân",
+    role: "Công nhân",
     trait: "Kỷ luật, đoàn kết giai cấp",
     icon: <Factory className="h-4 w-4" />,
     color: "stone" as const,
   },
   student: {
-    codename: "S3-03",
-    role: "Tuyến trí thức",
+    role: "Sinh viên",
     trait: "Nhạy bén, khao khát đổi mới",
     icon: <GraduationCap className="h-4 w-4" />,
     color: "blue" as const,
@@ -159,11 +157,11 @@ const BonusCardSelection = ({ baseAmount, onSelect }: BonusCardSelectionProps) =
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-4 px-4 py-1">PHẦN THƯỞNG MAY MẮN</Badge>
+          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-4 px-4 py-1">BIẾN SỐ LỊCH SỬ</Badge>
           <h2 className="text-4xl font-black text-stone-50 tracking-tighter uppercase leading-tight">
-            Chọn một <span className="text-amber-500">Lá Bài Ma Thuật</span>
+            Chọn một <span className="text-amber-500">Cơ hội khách quan</span>
           </h2>
-          <p className="text-stone-400 mt-2 text-lg">Vận may của nhà tư tưởng đang chờ đợi bạn...</p>
+          <p className="text-stone-400 mt-2 text-lg">Vận động của đời sống thực tiễn đang chờ đợi bạn...</p>
         </motion.div>
 
         <div className="flex flex-wrap justify-center gap-6 pt-8">
@@ -186,10 +184,10 @@ const BonusCardSelection = ({ baseAmount, onSelect }: BonusCardSelectionProps) =
                   <div className="absolute inset-0 backface-hidden rounded-2xl border-2 border-amber-500/30 bg-gradient-to-br from-stone-900 to-stone-950 flex flex-col items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                     <div className="absolute inset-0 bg-amber-500/5 opacity-50" style={{ backgroundImage: 'radial-gradient(circle at center, transparent 30%, rgba(245,158,11,0.1) 70%)' }}></div>
                     <div className="h-16 w-16 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/20 mb-4">
-                      <Sparkles className="h-8 w-8 text-amber-500/50" />
+                      <History className="h-8 w-8 text-amber-500/50" />
                     </div>
                     <div className="w-12 h-px bg-amber-500/20 mb-2"></div>
-                    <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-amber-500/40">Magic Card</span>
+                    <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-amber-500/40">Biến số</span>
                   </div>
                   
                   {/* Back (Face up) */}
@@ -205,7 +203,7 @@ const BonusCardSelection = ({ baseAmount, onSelect }: BonusCardSelectionProps) =
                     </div>
                     {val >= baseAmount * 2 && (
                       <div className="absolute top-2 right-2">
-                        <Badge className="bg-amber-400 text-stone-950 border-none text-[8px] font-black">SUPER</Badge>
+                        <Badge className="bg-amber-400 text-stone-950 border-none text-[8px] font-black">TÍCH LŨY</Badge>
                       </div>
                     )}
                   </div>
@@ -263,7 +261,7 @@ export default function Game() {
     setTimeout(() => setBonusNotice(null), 1500);
   });
 
-  const { entries: leaderboardEntries, addScore } = useLeaderboard();
+  const { entries: leaderboardEntries, submitScore: addScore, loading: loadingLeaderboard } = useGlobalLeaderboard();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   // Submit score to leaderboard when quiz results are reached
@@ -304,7 +302,7 @@ export default function Game() {
       <div className="game-grid-overlay" />
       <div className="game-noise" />
 
-      <div className="container relative z-10 py-6 md:py-8">
+      <div className="container relative z-10 pt-24 pb-6 md:pt-28 md:pb-8">
         <motion.header
           initial={{ opacity: 0, y: -24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -320,8 +318,8 @@ export default function Game() {
                   onClick={() => setLocation("/")}
                   className="border-amber-300/20 bg-white/5 text-amber-50 hover:bg-white/10"
                 >
-                  <Home className="h-4 w-4" />
-                  Trang chủ
+                  <ArrowLeft className="h-4 w-4" />
+                  Lý luận Nền tảng
                 </Button>
                 <Button
                   variant="outline"
@@ -402,7 +400,7 @@ export default function Game() {
                   >
                     <div className="space-y-3">
                       <label htmlFor="playerName" className="text-xs font-bold uppercase tracking-[0.3em] text-amber-200/50">
-                        Bí danh Nhà tư tưởng
+                        Định danh Chủ thể
                       </label>
                       <input
                         id="playerName"
@@ -437,8 +435,8 @@ export default function Game() {
             >
               <div className="game-panel">
                 <SectionTitle
-                  eyebrow="Roster Select"
-                  title="Chọn nhân vật để bắt đầu mô phỏng"
+                  eyebrow="Lựa chọn Chủ thể"
+                  title="Xác định vị trí xã hội khởi đầu"
                   description="Mỗi hồ sơ khởi đầu ở một vị trí xã hội khác nhau. Chính điểm xuất phát vật chất đó sẽ ảnh hưởng đến cách nhân vật tiếp nhận các biến động kế tiếp."
                 />
               </div>
@@ -465,7 +463,6 @@ export default function Game() {
                             {character.name}
                           </h3>
                         </div>
-                        <Badge className="game-badge">{summary.codename}</Badge>
                       </div>
 
                       <p className="mt-4 text-sm leading-7 text-stone-300">
@@ -546,7 +543,6 @@ export default function Game() {
                         {selectedCharacter.name}
                       </h2>
                     </div>
-                    <Badge className="game-badge">{profile.codename}</Badge>
                   </div>
 
                   <div className="mt-5 space-y-3">
@@ -650,8 +646,8 @@ export default function Game() {
                             <span>{currentQuestion.question}</span>
                             {currentQuestion.bonusMoney && (
                               <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 animate-pulse whitespace-nowrap">
-                                <Sparkles className="h-3 w-3 mr-1" />
-                                Bonus May Mắn
+                                <History className="h-3 w-3 mr-1" />
+                                Cơ hội Lịch sử
                               </Badge>
                             )}
                           </h3>
@@ -683,7 +679,7 @@ export default function Game() {
                               className="fixed left-1/2 -translate-x-1/2 z-50 pointer-events-none flex items-center gap-2 bg-amber-500 text-stone-950 px-4 py-2 rounded-full font-black text-lg shadow-[0_0_20px_rgba(245,158,11,0.5)]"
                             >
                               <Coins className="h-5 w-5" />
-                              +{bonusNotice.amount} TIỀN BẠC!
+                              +{bonusNotice.amount} TÍCH LŨY VẬT CHẤT!
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -763,18 +759,18 @@ export default function Game() {
                               >
                                 {(() => {
                                   const percent = (score / totalQuestions) * 100;
-                                  if (percent >= 100) return "S";
-                                  if (percent >= 80) return "A";
-                                  if (percent >= 60) return "B";
-                                  if (percent >= 40) return "C";
-                                  return "D";
+                                  if (percent >= 100) return "Đỉnh cao Biện chứng";
+                                  if (percent >= 80) return "Chủ thể Tiên phong";
+                                  if (percent >= 60) return "Nhận thức Tích cực";
+                                  if (percent >= 40) return "Bước đầu Trải nghiệm";
+                                  return "Giai đoạn Tìm tòi";
                                 })()}
                               </motion.div>
                               
                               <div className="text-center">
-                                <p className="text-[10px] uppercase tracking-[0.4em] text-amber-200/50 mb-1">Xếp hạng tiềm năng</p>
+                                <p className="text-[10px] uppercase tracking-[0.4em] text-amber-200/50 mb-1">Cấp độ Nhận thức</p>
                                 <h2 className="text-2xl font-black text-stone-50 uppercase tracking-widest">
-                                  {score === totalQuestions ? "Huyền thoại" : score >= totalQuestions/2 ? "Ưu tú" : "Cần rèn luyện"}
+                                  {score === totalQuestions ? "Vĩ nhân Tư tưởng" : score >= totalQuestions/2 ? "Chủ thể Xuất sắc" : "Nỗ lực Chuyển hóa"}
                                 </h2>
                                 <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 border border-white/10">
                                   <span className="text-xl font-bold text-amber-400">{score}</span>
@@ -802,10 +798,10 @@ export default function Game() {
                                       <Coins className="h-6 w-6" />
                                     </div>
                                     <div className="flex-1">
-                                      <p className="text-[10px] uppercase tracking-widest opacity-60">Thưởng Tiềm lực</p>
-                                      <p className="text-lg font-black tracking-tight">+{score * 10} Tiền bạc</p>
+                                      <p className="text-[10px] uppercase tracking-widest opacity-60">Tích lũy Thực tiễn</p>
+                                      <p className="text-lg font-black tracking-tight">+{score * 10} Nguồn lực vật chất</p>
                                     </div>
-                                    <Sparkles className="h-5 w-5 animate-pulse text-amber-300" />
+                                    <BookOpen className="h-5 w-5 animate-pulse text-amber-300" />
                                   </motion.div>
 
                                   <motion.div 
@@ -815,11 +811,11 @@ export default function Game() {
                                     className="reward-pill bg-stone-800/40 border-stone-700/50 text-stone-300"
                                   >
                                     <div className="h-10 w-10 shrink-0 rounded-xl bg-stone-700/30 flex items-center justify-center border border-stone-600/30">
-                                      <Zap className="h-5 w-5" />
+                                      <History className="h-5 w-5" />
                                     </div>
                                     <div className="flex-1">
-                                      <p className="text-[10px] uppercase tracking-widest opacity-60">Trạng thái Game</p>
-                                      <p className="text-sm font-bold">Mở khóa: Thực tại xã hội</p>
+                                      <p className="text-[10px] uppercase tracking-widest opacity-60">Trạng thái Thực thể</p>
+                                      <p className="text-sm font-bold">Chuyển hóa: Thực tại xã hội</p>
                                     </div>
                                   </motion.div>
                                 </div>
@@ -867,8 +863,8 @@ export default function Game() {
                                         <Trophy className="h-7 w-7" />
                                       </div>
                                       <div>
-                                        <h3 className="text-2xl font-black text-stone-50 tracking-tight">Hall of Legends</h3>
-                                        <p className="text-[10px] text-amber-500/60 uppercase tracking-[0.3em] font-bold">Bảng Vàng Nhà Tư Duy</p>
+                                        <h3 className="text-2xl font-black text-stone-50 tracking-tight">Vinh danh Chủ thể Lịch sử</h3>
+                                        <p className="text-[10px] text-amber-500/60 uppercase tracking-[0.3em] font-bold">Bảng Vàng Học thuật</p>
                                       </div>
                                     </div>
                                     <Button 
@@ -881,54 +877,58 @@ export default function Game() {
                                     </Button>
                                   </div>
 
-                                  <div className="bg-stone-900/50 rounded-2xl border border-stone-800 overflow-hidden">
-                                    <table className="w-full text-left text-sm">
-                                      <thead>
-                                        <tr className="border-b border-stone-800 bg-black/20">
-                                          <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Hạng</th>
-                                          <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Bí danh</th>
-                                          <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500 text-right">Tiềm lực</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {leaderboardEntries.map((entry, idx) => (
-                                          <tr 
-                                            key={entry.name} 
-                                            className={`border-b border-stone-800/50 transition-colors ${entry.name === playerName ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
-                                          >
-                                            <td className="px-6 py-4">
-                                              <span className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-black ${
-                                                idx === 0 ? 'bg-gradient-to-br from-amber-300 to-amber-600 text-stone-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 
-                                                idx === 1 ? 'bg-gradient-to-br from-stone-200 to-stone-400 text-stone-900' :
-                                                idx === 2 ? 'bg-gradient-to-br from-amber-700 to-amber-900 text-amber-50' :
-                                                'bg-stone-800 text-stone-400'
-                                              }`}>
-                                                {idx + 1}
-                                              </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                              <div className="flex items-center gap-2">
-                                                <span className={`font-bold text-base ${entry.name === playerName ? 'text-amber-400' : 'text-stone-300'}`}>
-                                                  {entry.name}
-                                                </span>
-                                                {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
-                                                {entry.isLegend && <Sparkles className="h-3 w-3 text-amber-500/50" />}
-                                              </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-right font-mono font-bold">
-                                              <span className={`${
-                                                entry.score >= 9 ? 'text-amber-400' :
-                                                entry.score >= 7 ? 'text-stone-400' :
-                                                'text-red-400'
-                                              }`}>
-                                                {Math.round((entry.score / entry.total) * 100)}%
-                                              </span>
-                                            </td>
-                                          </tr>
-                                        ))}
-                                      </tbody>
-                                    </table>
-                                  </div>
+                                    <div className="bg-stone-900/50 rounded-2xl border border-stone-800 overflow-hidden min-h-[400px] flex flex-col">
+                                      {loadingLeaderboard ? (
+                                        <div className="flex-1 flex flex-col items-center justify-center gap-4 text-stone-500">
+                                          <div className="h-10 w-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+                                          <p className="text-xs font-bold uppercase tracking-widest animate-pulse">Đang tải bảng vàng...</p>
+                                        </div>
+                                      ) : (
+                                        <table className="w-full text-left text-sm">
+                                          <thead>
+                                            <tr className="border-b border-stone-800 bg-black/20">
+                                              <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Vị thế</th>
+                                              <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Định danh Chủ thể</th>
+                                              <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500 text-right">Tầm vóc Tư tưởng</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {leaderboardEntries.map((entry, idx) => (
+                                              <tr 
+                                                key={`${entry.name}-${idx}`} 
+                                                className={`border-b border-stone-800/50 transition-colors ${entry.name === playerName ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
+                                              >
+                                                <td className="px-6 py-4">
+                                                  <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${
+                                                    idx < 3 ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30' : 
+                                                    'bg-stone-800 text-stone-400'
+                                                  }`}>
+                                                    {idx + 1}
+                                                  </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                  <div className="flex items-center gap-2">
+                                                    <span className={`font-bold text-base ${entry.name === playerName ? 'text-amber-400' : 'text-stone-300'}`}>
+                                                      {entry.name}
+                                                    </span>
+                                                    {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
+                                                  </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-right font-mono font-bold">
+                                                  <span className={`${
+                                                    entry.score >= 9 ? 'text-amber-400' :
+                                                    entry.score >= 7 ? 'text-stone-400' :
+                                                    'text-red-400'
+                                                  }`}>
+                                                    {Math.round((entry.score / entry.total) * 100)}%
+                                                  </span>
+                                                </td>
+                                              </tr>
+                                            ))}
+                                          </tbody>
+                                        </table>
+                                      )}
+                                    </div>
 
                                   <div className="pt-2 text-center">
                                     <p className="text-[11px] text-stone-500 italic">
@@ -961,11 +961,8 @@ export default function Game() {
                       <>
                         <div className="game-panel game-panel-glow">
                           <div className="flex flex-wrap items-center gap-3">
-                            <Badge className="game-badge">
-                              Tình huống đang xử lý
-                            </Badge>
                             <p className="text-xs uppercase tracking-[0.28em] text-amber-200/60">
-                              Phase {currentRound + 1}
+                              Giai đoạn {currentRound + 1}
                             </p>
                           </div>
 
@@ -1080,12 +1077,9 @@ export default function Game() {
 
                   <div className="min-w-[220px] rounded-[24px] border border-amber-300/20 bg-black/20 p-5">
                     <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
-                      Mã hồ sơ
+                      Vai trò hoàn thành
                     </p>
                     <p className="mt-2 text-2xl font-semibold text-stone-50">
-                      {profile.codename}
-                    </p>
-                    <p className="mt-2 text-sm leading-7 text-stone-300">
                       {profile.role}
                     </p>
                   </div>
@@ -1098,7 +1092,7 @@ export default function Game() {
                     Tồn tại xã hội cuối cùng
                   </p>
                   <div className="mt-4 space-y-3">
-                    <StatRow label="Tiền bạc" value={String(stats.money)} />
+                    <StatRow label="Nguồn lực vật chất" value={String(stats.money)} />
                     <StatRow label="Môi trường" value={stats.env} />
                     <StatRow label="Quan hệ" value={stats.rel} />
                   </div>

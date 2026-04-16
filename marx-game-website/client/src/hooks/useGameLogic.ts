@@ -77,69 +77,69 @@ const CHARACTERS: Character[] = [
 
 const SCENARIOS: Scenario[] = [
   {
-    title: "Gia đình thiếu tiền",
+    title: "Mâu thuẫn Kinh tế: Sự áp đặt của Tồn tại xã hội",
     description:
-      "Gia đình bạn đang gặp khó khăn tài chính đột ngột. Bạn cần đưa ra một quyết định quan trọng.",
+      "Gia đình bạn đang gặp áp lực vật chất đột ngột do biến động thị trường. Là một thực thể kinh tế, bạn phải đưa ra quyết định để duy trì sự tồn tại.",
     choices: [
       {
-        text: "Đi làm thêm, tạm gác việc học hoặc nghỉ ngơi",
+        text: "Ưu tiên tích lũy vật chất, tạm gác các hoạt động tinh thần",
         impact: {
           money: 15,
-          env: "Môi trường làm việc bận rộn",
-          rel: "Mở rộng quan hệ xã hội",
-          mind: "Thực dụng, trách nhiệm",
-          belief: "Lao động là trên hết",
+          env: "Môi trường lao động thực tiễn",
+          rel: "Quan hệ sản xuất mới",
+          mind: "Thực chứng, trách nhiệm",
+          belief: "Vật chất quyết định ý thức",
         },
         feedback:
-          "Bạn kiếm được tiền nhưng cũng cảm thấy mệt mỏi, tư duy bắt đầu xoay quanh việc mưu sinh.",
+          "Việc ưu tiên lao động giúp bạn ổn định vật chất, nhưng cũng làm thu hẹp không gian phản ánh tư duy lý luận phi thực tế.",
       },
       {
-        text: "Vay tiền để tiếp tục con đường hiện tại",
+        text: "Vay mượn tư liệu để duy trì tiến trình định hình tư duy",
         impact: {
           money: -10,
-          env: "Áp lực nợ nần",
-          rel: "Phụ thuộc người thân",
-          mind: "Kiên trì nhưng lo âu",
-          belief: "Tri thức là lối thoát",
+          env: "Áp lực phụ thuộc kinh tế",
+          rel: "Quan hệ ràng buộc nợ nần",
+          mind: "Kiên định nhưng lo âu",
+          belief: "Ý thức nỗ lực tác động ngược lại tồn tại",
         },
         feedback:
-          "Bạn giữ được mục tiêu ban đầu nhưng gánh nặng tài chính bắt đầu đè nặng lên tâm trí.",
+          "Bạn giữ được mục tiêu phát triển tư duy, nhưng sự lệ thuộc vào nguồn lực bên ngoài tạo ra một mâu thuẫn nội tại trong đời sống.",
       },
     ],
   },
   {
-    title: "Cơ hội thăng tiến",
+    title: "Biến động Địa vị: Sự vận động của Quan hệ sản xuất",
     description:
-      "Một cơ hội thăng tiến hoặc học bổng xuất hiện, nhưng đòi hỏi bạn phải chuyển đến một môi trường xa lạ.",
+      "Một cơ hội dịch chuyển vị trí trong hệ thống phân công lao động xã hội xuất hiện, yêu cầu bạn phải thay đổi hoàn toàn môi trường sinh tồn.",
     choices: [
       {
-        text: "Chấp nhận thử thách, đi đến nơi mới",
+        text: "Dịch chuyển đến trung tâm vận động mới",
         impact: {
           money: 20,
-          env: "Đô thị phát triển, hiện đại",
+          env: "Đô thị hiện đại, động năng cao",
           rel: "Mạng lưới chuyên nghiệp",
-          mind: "Sáng tạo, thích nghi",
-          belief: "Cá nhân, phát triển",
+          mind: "Sáng tạo, thích nghi biện chứng",
+          belief: "Sự thay đổi môi trường thay đổi tư duy",
         },
         feedback:
-          "Môi trường mới năng động giúp bạn thay đổi rõ rệt cách nhìn nhận thế giới.",
+          "Sự thay đổi trong Tồn tại xã hội mới đã kéo theo sự biến đổi rõ rệt trong Ý thức của bạn về thế giới.",
       },
       {
-        text: "Từ chối để ở lại gần gia đình và bạn bè",
+        text: "Bảo trì trạng thái ổn định tại môi trường cũ",
         impact: {
           money: 0,
-          env: "Ổn định, quen thuộc",
-          rel: "Gắn kết cộng đồng cũ",
-          mind: "An phận, tình cảm",
-          belief: "Truyền thống, gia đình",
+          env: "Tĩnh tại, quy ước",
+          rel: "Gắn kết cộng đồng truyền thống",
+          mind: "Bảo tồn, ổn định tâm lý",
+          belief: "Tính kế thừa của văn hóa cũ",
         },
         feedback:
-          "Sự ổn định giúp bạn yên tâm hơn, nhưng tư duy vẫn thiên về những giá trị quen thuộc.",
+          "Sự ổn định giúp bạn an toàn nhưng cũng hạn chế khả năng va chạm với những quy luật vận động mới của thời đại.",
       },
     ],
   },
   {
-    title: "Xung đột lợi ích",
+    title: "Ý thức Giai cấp: Đấu tranh xã hội trong thực tiễn",
     description:
       "Nơi làm việc hoặc học tập của bạn xảy ra bất công. Mọi người đang kêu gọi cùng nhau lên tiếng.",
     choices: [
@@ -147,7 +147,7 @@ const SCENARIOS: Scenario[] = [
         text: "Tham gia đấu tranh đòi quyền lợi",
         impact: {
           money: -5,
-          env: "Môi trường căng thẳng",
+          env: "Môi trường đối kháng giai cấp",
           rel: "Đoàn kết tập thể",
           mind: "Đấu tranh, phản biện",
           belief: "Công bằng xã hội",
@@ -170,33 +170,33 @@ const SCENARIOS: Scenario[] = [
     ],
   },
   {
-    title: "Sự thay đổi công nghệ",
+    title: "Cách mạng Kỹ thuật: Sự phát triển của Lực lượng sản xuất",
     description:
-      "Công nghệ mới như AI và tự động hóa đang thay đổi cách mọi người làm việc. Bạn sẽ phản ứng thế nào?",
+      "Những công cụ sản xuất mới (AI, tự động hóa) đang làm thay đổi căn bản cơ sở kinh tế của xã hội. Phản ứng của bạn là gì?",
     choices: [
       {
-        text: "Dành thời gian học cách sử dụng công nghệ mới",
+        text: "Làm chủ phương tiện sản xuất mới",
         impact: {
           money: 10,
-          env: "Thời đại số, kết nối",
-          rel: "Cộng đồng công nghệ",
-          mind: "Tư duy số, hiện đại",
-          belief: "Khoa học, tiến bộ",
+          env: "Kỷ nguyên công nghiệp mới",
+          rel: "Tương tác người - máy phức tạp",
+          mind: "Tư duy hệ thống hiện đại",
+          belief: "Khoa học trở thành lực lượng sản xuất trực tiếp",
         },
         feedback:
-          "Công cụ mới không chỉ giúp bạn làm việc mà còn làm thay đổi cách bạn hiểu về xã hội đang vận động.",
+          "Việc làm chủ công cụ mới giúp bạn nhận thức được sự biến đổi không ngừng của thế giới vật chất quanh mình.",
       },
       {
-        text: "Giữ vững phương pháp truyền thống",
+        text: "Duy trì phương thức tương tác truyền thống",
         impact: {
           money: -5,
-          env: "Lạc hậu dần",
-          rel: "Nhóm người bảo thủ",
-          mind: "Bảo thủ, kinh nghiệm",
-          belief: "Giá trị cũ, truyền thống",
+          env: "Lạc hậu tương đối",
+          rel: "Nhóm giá trị kinh nghiệm cũ",
+          mind: "Bảo thủ, kinh nghiệm chủ nghĩa",
+          belief: "Bản chất phi vật chất của lao động",
         },
         feedback:
-          "Bạn cảm thấy khó thích nghi hơn khi bối cảnh xã hội xung quanh thay đổi quá nhanh.",
+          "Sự chậm trễ trong việc thích nghi với lực lượng sản xuất mới khiến bạn gặp khó khăn khi bối cảnh vật chất đã thay đổi.",
       },
     ],
   },
@@ -285,6 +285,7 @@ export function useGameLogic() {
           scenario: scenario.title,
           choice: choice.text,
           feedback: choice.feedback,
+          impact: choice.impact
         },
       ]);
 

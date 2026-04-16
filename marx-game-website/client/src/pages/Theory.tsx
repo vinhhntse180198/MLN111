@@ -5,11 +5,10 @@ import {
   ArrowDown,
   ArrowLeft,
   Play,
-  Radar,
-  Scale,
-  Sparkles,
-  Home,
   RotateCcw,
+  Scale,
+  BookOpen,
+  Home,
   GraduationCap
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -27,12 +26,12 @@ const presentationBlocks = [
     body: "Ý thức không xuất hiện từ hư vô. Nó được nảy sinh và biến đổi từ hoàn cảnh sinh hoạt, lao động và các quan hệ xã hội cụ thể.",
   },
   {
-    icon: Radar,
+    icon: RotateCcw,
     title: "Biểu hiện trong game",
     body: "Tiền bạc, môi trường sống và quan hệ xã hội sẽ thay đổi trước; từ đó kéo theo tư duy và niềm tin của nhân vật.",
   },
   {
-    icon: Sparkles,
+    icon: BookOpen,
     title: "Điều cần quan sát",
     body: "Đừng chỉ xem nhân vật chọn gì, hãy xem vì sao họ chọn như vậy trong một bối cảnh vật chất nhất định.",
   },
@@ -88,7 +87,7 @@ export default function Theory() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600/90 to-blue-700/90 backdrop-blur-sm border-b border-blue-400/30"
+          className="fixed top-0 left-0 right-0 z-50 bg-stone-900/90 backdrop-blur-md border-b border-amber-500/20"
         >
           <div className="container px-6 py-4 flex items-center justify-between">
             <div>
@@ -99,7 +98,7 @@ export default function Theory() {
             <Button
               onClick={handleContinueGame}
               size="sm"
-              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold"
+              className="bg-amber-600 text-amber-50 hover:bg-amber-500 font-semibold border-none"
             >
               <Play className="h-4 w-4 mr-2" />
               Tiếp tục ngay
@@ -109,8 +108,8 @@ export default function Theory() {
       )}
 
       <main
-        className="container relative z-10 space-y-6 py-6 md:space-y-8 md:py-8"
-        style={isGameInProgress ? { paddingTop: "120px" } : {}}
+        className="container relative z-10 space-y-6 pt-24 pb-6 md:space-y-8 md:pt-28 md:pb-8"
+        style={isGameInProgress ? { paddingTop: "140px" } : {}}
       >
         <motion.section
           initial={{ opacity: 0, y: 24 }}
@@ -122,7 +121,7 @@ export default function Theory() {
               <div className="space-y-6">
                 <div className="flex flex-wrap items-center gap-3">
                   <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
-                    Trang 2/2 • Giải thích cách game minh họa lý thuyết
+                    Chương II: Vận động xã hội & Biện chứng thực tiễn
                   </p>
                   <Button
                     variant="outline"
@@ -138,10 +137,10 @@ export default function Theory() {
                   Từ lý thuyết sang trải nghiệm: game sẽ minh họa điều đó như
                   thế nào?
                 </h1>
+
                 <p className="max-w-3xl text-sm leading-8 text-stone-300 md:text-base">
-                  Đây là một trang dài riêng. Bạn cứ kéo xuống như đang đi tiếp
-                  một chương mới của bài thuyết trình: từ nguyên lý chung, sang
-                  cơ chế mô phỏng, rồi chốt lại bằng cách demo và vào chơi.
+                  Hệ thống được thiết kế để theo dõi sự tương tác biện chứng giữa các yếu tố vật chất và tinh thần. 
+                  Hãy quan sát cách các biến đổi khách quan trong đời sống sản xuất dẫn dắt sự thay đổi trong chiều sâu tư tưởng của chủ thể.
                 </p>
               </div>
 
@@ -161,14 +160,14 @@ export default function Theory() {
                 <div className="game-chip">
                   <span className="game-chip-label">Kết quả</span>
                   <span className="game-chip-value">
-                    Một hồ sơ ý thức sau mỗi chương
+                    Tổng kết tư duy nhân vật
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 text-sm text-amber-100/80">
                 <ArrowDown className="h-4 w-4" />
-                <span>Kéo xuống để xem phần cơ chế và cách demo</span>
+                <span>Tìm hiểu về sự vận động khách quan qua các giai đoạn mô phỏng</span>
               </div>
             </div>
           </div>
@@ -182,7 +181,7 @@ export default function Theory() {
         >
           <div className="game-panel">
             <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
-              Cơ chế minh họa
+              Nguyên lý Mô phỏng
             </p>
             <h2 className="mt-4 text-3xl font-semibold text-stone-50">
               Game không giảng lý thuyết bằng chữ, mà cho người chơi tự thấy sự
@@ -209,7 +208,7 @@ export default function Theory() {
         >
           <div className="game-panel game-panel-glow">
             <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
-              Gợi ý khi demo
+              Tiến trình Biện chứng
             </p>
             <div className="mt-5 space-y-4">
               {demoFlow.map(item => (
@@ -223,17 +222,18 @@ export default function Theory() {
 
           <div className="game-panel">
             <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
-              Chốt phần lý thuyết
+              Tổng kết Luận điểm
             </p>
             <div className="mt-4 space-y-3 text-sm leading-8 text-stone-300">
               <p>
-                Trang 1 giúp người xem hiểu luận điểm. Trang 2 giúp họ hiểu vì
-                sao game là một minh họa trực quan cho luận điểm đó.
+                Hệ thống mô phỏng này đóng vai trò là nhịp cầu tri thức, giúp
+                hiện thực hóa các luận điểm trừu tượng thành những biến số thực
+                tiễn sinh động.
               </p>
               <p>
-                Từ đây bạn có thể vào game như một phần demo thực nghiệm: hoàn
-                cảnh vật chất thay đổi ra sao thì ý thức của nhân vật cũng đổi
-                theo như vậy.
+                Từ đây bạn có thể vào game như một phần thực nghiệm: quan sát 
+                sự biến đổi của ý thức chủ thể dưới tác động trực tiếp từ 
+                những điều kiện vật chất khách quan.
               </p>
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function Theory() {
             className="border-amber-300/20 bg-white/5 text-amber-50 hover:bg-white/10"
           >
             <ArrowLeft className="h-4 w-4" />
-            Trang 1
+            Lý luận Nền tảng
           </Button>
 
 
@@ -261,7 +261,7 @@ export default function Theory() {
             <Button
               onClick={handleContinueGame}
               size="lg"
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-300"
+              className="bg-amber-700 hover:bg-amber-600 text-white font-semibold transition-all duration-300 border-none"
             >
               <Play className="h-4 w-4" />
               Tiếp tục chơi

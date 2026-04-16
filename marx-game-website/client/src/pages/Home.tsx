@@ -7,11 +7,11 @@ import {
   Factory,
   Landmark,
   Users,
-  Circle,
-  Zap,
-  Link2,
+  Repeat,
+  Layers,
   Play,
-  GraduationCap
+  GraduationCap,
+  History
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
@@ -66,7 +66,7 @@ const relationshipAspects = [
     ],
   },
   {
-    icon: Zap,
+    icon: Layers,
     title: "YTXH có tính độc lập tương đối",
     points: [
       "Không phụ thuộc hoàn toàn vào TTXH",
@@ -75,7 +75,7 @@ const relationshipAspects = [
     ],
   },
   {
-    icon: Link2,
+    icon: Repeat,
     title: "YTXH tác động trở lại TTXH",
     points: [
       "✅ Thúc đẩy: khi phù hợp xu hướng phát triển",
@@ -119,8 +119,7 @@ export default function Home() {
 
   return (
     <div
-      className="game-shell relative overflow-y-scroll scroll-smooth h-screen"
-      style={{ scrollBehavior: "smooth" }}
+      className="game-shell relative scroll-smooth"
     >
       <div className="game-backdrop" />
       <div className="game-grid-overlay" />
@@ -131,7 +130,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600/90 to-blue-700/90 backdrop-blur-sm border-b border-blue-400/30"
+          className="fixed top-0 left-0 right-0 z-50 bg-stone-900/90 backdrop-blur-md border-b border-amber-500/20"
         >
           <div className="container px-6 py-4 flex items-center justify-between">
             <div>
@@ -142,7 +141,7 @@ export default function Home() {
             <Button
               onClick={() => setLocation("/game")}
               size="sm"
-              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold"
+              className="bg-amber-600 text-amber-50 hover:bg-amber-500 font-semibold border-none"
             >
               <Play className="h-4 w-4 mr-2" />
               Tiếp tục ngay
@@ -159,7 +158,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="min-h-screen px-6 py-8 md:px-8 md:py-12 flex items-center"
+          className="min-h-screen px-6 pt-24 pb-8 md:px-8 md:pt-28 md:pb-12 flex items-center"
         >
           <div className="container">
             <motion.div
@@ -174,9 +173,9 @@ export default function Home() {
               >
                 <div className="space-y-8">
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="game-led h-2 w-2" />
+                    <History className="h-4 w-4 text-amber-200/60" />
                     <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-amber-200/60">
-                      Trang 1/2 • Phần lý thuyết
+                      Chương I: Quy luật của Tồn tại
                     </p>
                   </div>
 
@@ -191,10 +190,8 @@ export default function Home() {
                       người?
                     </h1>
                     <p className="max-w-2xl text-base leading-relaxed text-stone-400 md:text-lg">
-                      Ở trang đầu tiên, mình giữ vai trò như phần mở bài khi
-                      thuyết trình: nêu luận điểm chính, giải thích khái niệm
-                      nền và tạo đà để người xem kéo xuống từng phần thay vì
-                      nhảy ngay sang trang kế tiếp.
+                      Khám phá chiều sâu của mối quan hệ biện chứng giữa đời sống vật chất và tinh thần. 
+                      Tìm hiểu cách những điều kiện khách quan nhào nặn nên thế giới quan của mỗi con người.
                     </p>
                   </div>
                 </div>
@@ -217,7 +214,7 @@ export default function Home() {
                     >
                       <ArrowDown className="h-4 w-4" />
                     </motion.div>
-                    <span>Kéo xuống để xem lần lượt từng ý của trang này</span>
+                    <span>Phân tích cấu trúc Hệ quy luật Xã hội</span>
                   </div>
                 </div>
               </motion.div>
@@ -225,13 +222,13 @@ export default function Home() {
               <motion.div variants={itemVariants} className="space-y-5">
                 <div className="game-panel p-7 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm hover:border-amber-300/40 transition-all duration-300">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-6">
-                    Mục tiêu trang 1
+                    Cơ sở Lý luận
                   </p>
                   <div className="space-y-4">
                     {[
-                      "Giải thích vì sao hoàn cảnh sống không chỉ ảnh hưởng hành vi mà còn ảnh hưởng cách nghĩ.",
-                      "Tách rõ cái gì thuộc về tồn tại xã hội và cái gì thuộc về ý thức xã hội.",
-                      "Chuẩn bị nền để sang trang hai nói về cách game minh họa lý thuyết đó.",
+                      "Làm rõ vai trò quyết định của đời sống vật chất đối với nhận thức con người.",
+                      "Phân tích các yếu tố khách quan cấu thành nên nền tảng xã hội.",
+                      "Tạo tiền đề lý luận vững chắc trước khi bước vào hành trình mô phỏng thực tế.",
                     ].map((text, i) => (
                       <motion.div
                         key={i}
@@ -254,16 +251,16 @@ export default function Home() {
 
                 <div className="game-panel p-7 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-5">
-                    Cách dùng trong bài trình bày
+                    Diễn giải tính quy luật
                   </p>
                   <div className="space-y-4 text-sm leading-relaxed text-stone-400">
                     <p>
-                      Bạn có thể dùng riêng trang này để nói phần dẫn nhập và
-                      luận điểm triết học trước.
+                      Hệ thống lý luận Mác-Lênin chỉ ra rằng, để hiểu được một thời đại hay một con người, 
+                      ta không thể chỉ dựa vào những gì họ tự nghĩ về mình.
                     </p>
                     <p>
-                      Sau khi kéo xuống hết, người xem đã nắm nền lý thuyết rồi
-                      mới chuyển sang trang hai để xem game thể hiện nó thế nào.
+                      Ngược lại, ta phải giải thích tư duy đó dựa trên những mâu thuẫn của đời sống vật chất 
+                      và sự vận động của các phương thức sản xuất.
                     </p>
                   </div>
                 </div>
@@ -303,8 +300,8 @@ export default function Home() {
                   Muốn hiểu ý thức, trước hết phải nhìn vào đời sống cụ thể
                 </h2>
                 <p className="text-base leading-relaxed text-stone-400 md:text-lg">
-                  Phần này là lõi lý thuyết của trang 1. Bạn có thể kéo xuống và
-                  nói từng ý như ba nhịp nhỏ trong một bài trình bày liền mạch.
+                  Lý luận về Tồn tại xã hội và Ý thức xã hội cung cấp cái nhìn khoa học về nguồn gốc của nhận thức, 
+                  khẳng định rằng vật chất luôn là cái có trước và quyết định tinh thần.
                 </p>
               </motion.div>
 
@@ -407,7 +404,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-2.5 bg-amber-300/10 rounded-lg">
-                    <Circle className="h-6 w-6 text-amber-200" />
+                    <History className="h-6 w-6 text-amber-200" />
                   </div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70">
                     Các yếu tố cơ bản
@@ -466,7 +463,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-2.5 bg-amber-300/10 rounded-lg">
-                    <Link2 className="h-6 w-6 text-amber-200" />
+                    <Repeat className="h-6 w-6 text-amber-200" />
                   </div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70">
                     Mối quan hệ biện chứng
@@ -535,7 +532,7 @@ export default function Home() {
                 className="game-panel p-8 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm"
               >
                 <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-8">
-                  Khung thuyết trình
+                  Hệ thống Luận điểm
                 </p>
                 <div className="space-y-3">
                   {presentationOutline.map((item, index) => (
@@ -564,7 +561,7 @@ export default function Home() {
               >
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-8">
-                    Chuyển sang trang 2
+                    Hiện thực hóa Vận động
                   </p>
                   <h2 className="text-4xl md:text-5xl font-bold leading-tight text-amber-50 mb-6">
                     Khi nền lý thuyết đã rõ, trang tiếp theo sẽ trả lời: game
@@ -572,14 +569,12 @@ export default function Home() {
                   </h2>
                   <div className="space-y-4 text-sm leading-relaxed text-stone-400">
                     <p>
-                      Ở trang hai, mình sẽ không làm dạng slide nối tiếp nữa mà
-                      cũng là một trang dài riêng để bạn kéo xuống như đang
-                      thuyết trình một chương mới.
+                      Sau khi đã nắm vững các nguyên lý cơ bản, chúng ta sẽ chuyển sang phần mô phỏng 
+                      để quan sát sự vận động này trong những tình huống cụ thể.
                     </p>
                     <p>
-                      Như vậy flow sẽ đúng ý bạn: trang đầu kéo xuống, xong mới
-                      sang trang thứ hai và tiếp tục kéo xuống trong chính trang
-                      đó.
+                      Hãy chuẩn bị tâm thế để đối mặt với những biến chuyển của hoàn cảnh và xem chúng 
+                      thay đổi ý chí con người như thế nào.
                     </p>
                   </div>
                 </div>
@@ -595,7 +590,7 @@ export default function Home() {
                       <Button
                         onClick={() => setLocation("/game")}
                         size="lg"
-                        className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/30"
+                        className="w-full md:w-auto px-8 py-3 bg-amber-700 hover:bg-amber-600 text-white font-semibold rounded-lg transition-all duration-300 border-none"
                       >
                         <Play className="h-5 w-5 mr-2" />
                         Tiếp tục chơi
@@ -609,7 +604,7 @@ export default function Home() {
                     <Button
                       onClick={() => setLocation("/ly-thuyet")}
                       size="lg"
-                      className="game-cta w-full md:w-auto px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-amber-500/30"
+                      className="game-cta w-full md:w-auto px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg transition-all duration-300 border-none"
                     >
                       Bắt đầu chơi game
                       <ArrowRight className="h-5 w-5 ml-2" />
