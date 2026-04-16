@@ -17,6 +17,11 @@ import { useLocation } from "wouter";
 
 const presentationBlocks = [
   {
+    icon: GraduationCap,
+    title: "Khái niệm Ý thức xã hội",
+    body: "Ý thức xã hội là khái niệm triết học dùng để chỉ các mặt, các bộ phận khác nhau của lĩnh vực tinh thần xã hội như quan điểm, tư tưởng, tình cảm, tâm trạng, truyền thống... của cộng đồng xã hội; mà những bộ phận này nảy sinh từ tồn tại xã hội và phản ánh tồn tại xã hội trong những giai đoạn phát triển nhất định.",
+  },
+  {
     icon: Scale,
     title: "Luận điểm chính",
     body: "Ý thức không xuất hiện từ hư vô. Nó được nảy sinh và biến đổi từ hoàn cảnh sinh hoạt, lao động và các quan hệ xã hội cụ thể.",

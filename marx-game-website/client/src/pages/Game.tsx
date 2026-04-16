@@ -241,6 +241,8 @@ export default function Game() {
     changeIdentity,
   } = useGameLogic();
 
+  const [bonusNotice, setBonusNotice] = useState<{ amount: number; id: number } | null>(null);
+
   const {
     quizState,
     currentQuestion,
@@ -257,8 +259,8 @@ export default function Game() {
     completeBonus
   } = useQuizLogic(selectedCharacter?.id, (amount) => {
     addMoney(amount);
-    setCheckPoint({ amount, id: Date.now() });
-    setTimeout(() => setCheckPoint(null), 1500);
+    setBonusNotice({ amount, id: Date.now() });
+    setTimeout(() => setBonusNotice(null), 1500);
   });
 
   const { entries: leaderboardEntries, addScore } = useLeaderboard();
@@ -906,7 +908,7 @@ export default function Game() {
                                             </td>
                                             <td className="px-6 py-4">
                                               <div className="flex items-center gap-2">
-                                                <span className={`font-bold text-base ${entry.isPlayer ? 'text-amber-400' : 'text-stone-300'}`}>
+                                                <span className={`font-bold text-base ${entry.name === playerName ? 'text-amber-400' : 'text-stone-300'}`}>
                                                   {entry.name}
                                                 </span>
                                                 {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
