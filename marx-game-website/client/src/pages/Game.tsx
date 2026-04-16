@@ -25,7 +25,8 @@ import {
   Zap,
   Sparkles
 } from "lucide-react";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useLocation } from "wouter";
 
 function SectionTitle({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -240,9 +241,6 @@ export default function Game() {
     changeIdentity,
   } = useGameLogic();
 
-  const [bonusNotice, setBonusNotice] = useState<{ amount: number; id: number } | null>(null);
-
-  // Integrated Quiz Logic
   const {
     quizState,
     currentQuestion,
@@ -259,11 +257,19 @@ export default function Game() {
     completeBonus
   } = useQuizLogic(selectedCharacter?.id, (amount) => {
     addMoney(amount);
-    setBonusNotice({ amount, id: Date.now() });
-    setTimeout(() => setBonusNotice(null), 1500);
+    setCheckPoint({ amount, id: Date.now() });
+    setTimeout(() => setCheckPoint(null), 1500);
   });
 
+  const { entries: leaderboardEntries, addScore } = useLeaderboard();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+  // Submit score to leaderboard when quiz results are reached
+  useEffect(() => {
+    if (quizState === "results" && playerName) {
+      addScore(playerName, score, totalQuestions);
+    }
+  }, [quizState, playerName, score, totalQuestions, addScore]);
 
   useEffect(() => {
     if (!hasCompletedTheory()) {
@@ -818,10 +824,6 @@ export default function Game() {
                               </div>
 
                               <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                                <Button onClick={() => startPlaying(score)} className="game-cta flex-1 group">
-                                  Bắt đầu cuộc đời thực tế
-                                  <ChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                                </Button>
                                 <Button onClick={resetQuiz} variant="outline" className="border-white/5 bg-white/5 text-stone-400 hover:bg-white/10 hover:text-stone-200">
                                   <RotateCcw className="mr-2 h-4 w-4" />
                                   Thử lại
@@ -887,17 +889,10 @@ export default function Game() {
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {[
-                                          { name: "Karl Marx", score: 10, isLegend: true },
-                                          { name: "Friedrich Engels", score: 10, isLegend: true },
-                                          { name: "V.I. Lenin", score: 9, isLegend: true },
-                                          { name: playerName || "Người vô danh", score: score, isPlayer: true },
-                                          { name: "Rosa Luxemburg", score: 8, isLegend: true },
-                                          { name: "Antonio Gramsci", score: 7, isLegend: true },
-                                        ].sort((a,b) => b.score - a.score).map((entry, idx) => (
+                                        {leaderboardEntries.map((entry, idx) => (
                                           <tr 
                                             key={entry.name} 
-                                            className={`border-b border-stone-800/50 transition-colors ${entry.isPlayer ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
+                                            className={`border-b border-stone-800/50 transition-colors ${entry.name === playerName ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
                                           >
                                             <td className="px-6 py-4">
                                               <span className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-black ${
@@ -914,6 +909,7 @@ export default function Game() {
                                                 <span className={`font-bold text-base ${entry.isPlayer ? 'text-amber-400' : 'text-stone-300'}`}>
                                                   {entry.name}
                                                 </span>
+                                                {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
                                                 {entry.isLegend && <Sparkles className="h-3 w-3 text-amber-500/50" />}
                                               </div>
                                             </td>
@@ -923,7 +919,7 @@ export default function Game() {
                                                 entry.score >= 7 ? 'text-stone-400' :
                                                 'text-red-400'
                                               }`}>
-                                                {Math.round((entry.score / 10) * 100)}%
+                                                {Math.round((entry.score / entry.total) * 100)}%
                                               </span>
                                             </td>
                                           </tr>
