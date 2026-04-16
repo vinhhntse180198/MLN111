@@ -437,7 +437,84 @@ export default function Home() {
                   cần thiết để sống.
                 </p>
               </motion.div>
+            </motion.div>
+          </div>
+        </motion.section>
 
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true, amount: 0.2 }}
+          className="min-h-screen px-6 py-8 md:px-8 md:py-12 flex flex-col justify-center"
+        >
+          <div className="container">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="space-y-8"
+            >
+              <motion.div
+                variants={itemVariants}
+                className="game-panel p-8 rounded-xl border border-amber-300/20"
+              >
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="p-2.5 bg-amber-300/10 rounded-lg">
+                    <History className="h-6 w-6 text-amber-200" />
+                  </div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
+                    Các yếu tố cơ bản
+                  </p>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold leading-tight text-amber-50 mb-12">
+                  Tồn tại xã hội gồm những gì?
+                </h2>
+                <div className="grid gap-6 md:grid-cols-3">
+                  {basicElements.map((element, index) => (
+                    <motion.div
+                      key={index}
+                      variants={itemVariants}
+                      whileHover={{ y: -4 }}
+                      className="group p-7 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm hover:border-amber-300/40 hover:bg-amber-300/10 transition-all duration-300"
+                    >
+                      <div className="mb-4">
+                        <span className="inline-flex items-center justify-center w-10 h-10 bg-amber-300/15 group-hover:bg-amber-300/25 rounded-lg transition-colors duration-300">
+                          <span className="text-xl font-bold text-amber-200">
+                            {index + 1}
+                          </span>
+                        </span>
+                      </div>
+                      <p className="text-lg font-bold text-amber-50 mb-3">
+                        {element.title}
+                      </p>
+                      <p className="text-sm leading-relaxed text-stone-400">
+                        {element.description}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true, amount: 0.2 }}
+          className="min-h-screen px-6 py-8 md:px-8 md:py-12 flex flex-col justify-center"
+        >
+          <div className="container">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="space-y-8"
+            >
               <motion.div
                 variants={itemVariants}
                 className="game-panel p-8 rounded-xl border border-amber-300/20"
@@ -502,65 +579,6 @@ export default function Home() {
                       ))}
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true, amount: 0.2 }}
-          className="min-h-screen px-6 py-8 md:px-8 md:py-12 flex flex-col justify-center"
-        >
-          <div className="container">
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              className="space-y-8"
-            >
-              <motion.div
-                variants={itemVariants}
-                className="game-panel p-8 rounded-xl border border-amber-300/20"
-              >
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="p-2.5 bg-amber-300/10 rounded-lg">
-                    <History className="h-6 w-6 text-amber-200" />
-                  </div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
-                    Các yếu tố cơ bản
-                  </p>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight text-amber-50 mb-12">
-                  Tồn tại xã hội gồm những gì?
-                </h2>
-                <div className="grid gap-6 md:grid-cols-3">
-                  {basicElements.map((element, index) => (
-                    <motion.div
-                      key={index}
-                      variants={itemVariants}
-                      whileHover={{ y: -4 }}
-                      className="group p-7 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm hover:border-amber-300/40 hover:bg-amber-300/10 transition-all duration-300"
-                    >
-                      <div className="mb-4">
-                        <span className="inline-flex items-center justify-center w-10 h-10 bg-amber-300/15 group-hover:bg-amber-300/25 rounded-lg transition-colors duration-300">
-                          <span className="text-xl font-bold text-amber-200">
-                            {index + 1}
-                          </span>
-                        </span>
-                      </div>
-                      <p className="text-lg font-bold text-amber-50 mb-3">
-                        {element.title}
-                      </p>
-                      <p className="text-sm leading-relaxed text-stone-400">
-                        {element.description}
-                      </p>
-                    </motion.div>
-                  ))}
                 </div>
               </motion.div>
             </motion.div>

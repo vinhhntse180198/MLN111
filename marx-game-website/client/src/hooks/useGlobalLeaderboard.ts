@@ -1,11 +1,13 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { ref, push, onValue, query, orderByChild, limitToLast, set } from "firebase/database";
+import { ref, get, set, onValue, query, orderByChild, limitToLast } from "firebase/database";
 import { db } from "@/lib/firebase";
 
 export interface LeaderboardEntry {
   name: string;
-  score: number;
+  farmer: number;
+  worker: number;
+  student: number;
   total: number;
   date: number;
   isLegend?: boolean;
@@ -17,52 +19,62 @@ export function useGlobalLeaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load from Firebase
+  // Load from Firebase, sorted by total cumulative score
   useEffect(() => {
-    // Safety check for database URL
     const dbUrl = db.app.options.databaseURL;
     if (!dbUrl || dbUrl.includes("firebaseio.com")) {
-      console.warn("Global Leaderboard is not configured correctly or using default-only US endpoint. Skipping Firebase connection.");
+      console.warn("Global Leaderboard is not configured correctly. Skipping Firebase connection.");
       setLoading(false);
       return;
     }
 
     try {
       const scoresRef = ref(db, "scores");
-      // Order by raw score to get the top performers
-      const topScoresQuery = query(scoresRef, orderByChild("score"), limitToLast(100));
+      const topScoresQuery = query(scoresRef, orderByChild("total"), limitToLast(100));
 
       const unsubscribe = onValue(topScoresQuery, (snapshot) => {
         try {
           const data = snapshot.val();
           const playerEntries: LeaderboardEntry[] = [];
-          
+
           if (data) {
             Object.keys(data).forEach((key) => {
-              playerEntries.push(data[key]);
+              const entry = data[key];
+              // Normalize old entries that might not have per-role fields
+              playerEntries.push({
+                name: entry.name || key,
+                farmer: entry.farmer || 0,
+                worker: entry.worker || 0,
+                student: entry.student || 0,
+                total: entry.total || entry.score || 0,
+                date: entry.date || 0,
+              });
             });
           }
 
-          // Combine with legends and sort by score (Primary: score DESC, Secondary: date ASC)
+          // Combine with legends and sort by total DESC, tie-break by earlier date
           const combined = [...LEGENDS, ...playerEntries].sort((a, b) => {
-            if (b.score !== a.score) return b.score - a.score;
-            return a.date - b.date; // Earlier achiever wins the tie
+            if (b.total !== a.total) return b.total - a.total;
+            return a.date - b.date;
           });
 
-          // Keep only top unique names, keeping their best score
+          // Deduplicate by name, keep only best (highest total) per player
           const uniqueMap = new Map<string, LeaderboardEntry>();
           combined.forEach(entry => {
             const existing = uniqueMap.get(entry.name);
-            if (!existing || entry.score > existing.score) {
+            if (!existing || entry.total > existing.total) {
               uniqueMap.set(entry.name, entry);
             }
           });
 
-          // Final sort and slice to top 50
-          setEntries(Array.from(uniqueMap.values()).sort((a, b) => {
-            if (b.score !== a.score) return b.score - a.score;
-            return a.date - b.date;
-          }).slice(0, 50));
+          setEntries(
+            Array.from(uniqueMap.values())
+              .sort((a, b) => {
+                if (b.total !== a.total) return b.total - a.total;
+                return a.date - b.date;
+              })
+              .slice(0, 50)
+          );
           setLoading(false);
         } catch (innerError) {
           console.error("Error processing leaderboard snapshot:", innerError);
@@ -80,28 +92,48 @@ export function useGlobalLeaderboard() {
     }
   }, []);
 
-  const submitScore = useCallback(async (name: string, score: number, total: number) => {
-    if (!name) return;
-    
-    // Clean name for firebase key
-    const safeName = name.replace(/[.#$[\]]/g, "_");
-    const scoresRef = ref(db, `scores/${safeName}`);
-    const scoreRatio = total > 0 ? score / total : 0;
+  /**
+   * Submit a score for a specific role. The score is ACCUMULATED (added on top of
+   * any previous score for that role). The `total` field is always the sum of all 3 roles.
+   */
+  const submitScore = useCallback(async (name: string, roleId: string, newScore: number) => {
+    if (!name || !roleId) return;
 
-    const newEntry: LeaderboardEntry = {
-      name,
-      score,
-      total,
-      date: Date.now(),
-    };
+    const safeName = name.replace(/[.#$[\]]/g, "_");
+    const playerRef = ref(db, `scores/${safeName}`);
 
     try {
-      await set(scoresRef, {
-        ...newEntry,
-        scoreRatio: scoreRatio // Keep ratio for metadata
-      });
+      // Read existing data first
+      const snapshot = await get(playerRef);
+      const existing = snapshot.val() || {
+        name,
+        farmer: 0,
+        worker: 0,
+        student: 0,
+        total: 0,
+        date: Date.now(),
+      };
+
+      // Accumulate the score for the specific role
+      const updated: LeaderboardEntry = {
+        name,
+        farmer: existing.farmer || 0,
+        worker: existing.worker || 0,
+        student: existing.student || 0,
+        date: Date.now(),
+        total: 0,
+      };
+
+      if (roleId === "farmer" || roleId === "worker" || roleId === "student") {
+        updated[roleId] = (existing[roleId] || 0) + newScore;
+      }
+
+      // Recalculate total from all 3 roles
+      updated.total = updated.farmer + updated.worker + updated.student;
+
+      await set(playerRef, updated);
     } catch (e) {
-      console.error("Failed to submit score", e);
+      console.error("Failed to submit score:", e);
     }
   }, []);
 

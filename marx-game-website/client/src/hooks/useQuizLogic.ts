@@ -4,7 +4,11 @@ import { QUIZ_QUESTIONS, QuizQuestion } from "@/const/quiz";
 
 export type QuizState = "intro" | "questions" | "results";
 
-export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: number) => void) {
+export function useQuizLogic(
+  roleId?: string | null,
+  onBonusEarned?: (amount: number) => void,
+  onPenaltyIncurred?: (amount: number) => void
+) {
   const [quizState, setQuizState] = useState<QuizState>("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -31,8 +35,8 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
       [shuffledRoleQuestions[i], shuffledRoleQuestions[j]] = [shuffledRoleQuestions[j], shuffledRoleQuestions[i]];
     }
 
-    // Combine shuffled role questions (limit to 5) with boss questions at the end
-    return [...shuffledRoleQuestions.slice(0, 5), ...bossQuestions];
+    // Combine all shuffled role questions with boss questions at the end
+    return [...shuffledRoleQuestions, ...bossQuestions];
   }, [roleId]);
 
 
@@ -79,13 +83,16 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
     setLastSelected(answerIndex);
     setIsChecking(true);
     
-    // Immediate score update if needed, or wait? Let's update at the end of the delay
-    // Actually, user wants real-time, so update score immediately
     if (isCorrect) {
       setScore(prev => prev + 1);
       // Award base 10 money for every correct answer
       if (onBonusEarned) {
         onBonusEarned(10);
+      }
+    } else {
+      // Deduct penaltyMoney if defined for this question
+      if (onPenaltyIncurred && currentQuestion.penaltyMoney && currentQuestion.penaltyMoney > 0) {
+        onPenaltyIncurred(currentQuestion.penaltyMoney);
       }
     }
 

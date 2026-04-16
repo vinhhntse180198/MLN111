@@ -7,7 +7,8 @@ export interface QuizQuestion {
   correctAnswerIndex: number;
   roleId: "farmer" | "worker" | "student" | "all";
   explanation?: string;
-  bonusMoney?: number;
+  bonusMoney?: number;    // Extra money awarded when answered correctly
+  penaltyMoney?: number;  // Money deducted when answered incorrectly
 }
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [

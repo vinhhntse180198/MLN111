@@ -267,21 +267,32 @@ export default function Game() {
     completeBonus,
     showContextIntro,
     continueToQuestion
-  } = useQuizLogic(selectedCharacter?.id, (amount) => {
-    addMoney(amount);
-    setBonusNotice({ amount, id: Date.now() });
-    setTimeout(() => setBonusNotice(null), 1500);
-  });
+  } = useQuizLogic(
+    selectedCharacter?.id,
+    // onBonusEarned: called when correct answer is given
+    (amount) => {
+      addMoney(amount);
+      setBonusNotice({ amount, id: Date.now() });
+      setTimeout(() => setBonusNotice(null), 1500);
+    },
+    // onPenaltyIncurred: called when wrong answer is given on a question with penaltyMoney
+    (amount) => {
+      addMoney(-amount);
+      setBonusNotice({ amount: -amount, id: Date.now() });
+      setTimeout(() => setBonusNotice(null), 1500);
+    }
+  );
 
   const { entries: leaderboardEntries, submitScore: addScore, loading: loadingLeaderboard } = useGlobalLeaderboard();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [leaderboardTab, setLeaderboardTab] = useState<"role" | "total">("role");
 
-  // Submit total accumulated money to leaderboard when game ends
+  // Submit accumulated money for this role to leaderboard when game ends
   useEffect(() => {
-    if (gameState === "ended" && playerName && stats) {
-      addScore(playerName, stats.money, 0); // We use 0 as total since we track absolute points now
+    if (gameState === "ended" && playerName && stats && selectedCharacter) {
+      addScore(playerName, selectedCharacter.id, stats.money);
     }
-  }, [gameState, playerName, stats?.money, addScore]);
+  }, [gameState, playerName, stats?.money, selectedCharacter, addScore]);
 
   useEffect(() => {
     if (!hasCompletedTheory()) {
@@ -1153,11 +1164,11 @@ export default function Game() {
                                                 <td className="px-6 py-4 text-right">
                                                   <div className="flex flex-col items-end">
                                                     <span className={`font-mono text-lg font-black ${
-                                                      entry.score >= 100 ? 'text-amber-400' :
-                                                      entry.score >= 50 ? 'text-stone-300' :
+                                                      entry.total >= 100 ? 'text-amber-400' :
+                                                      entry.total >= 50 ? 'text-stone-300' :
                                                       'text-stone-500'
                                                     }`}>
-                                                      {entry.score.toLocaleString()}đ
+                                                      {entry.total.toLocaleString()}đ
                                                     </span>
                                                   </div>
                                                 </td>
