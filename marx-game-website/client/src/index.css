@@ -174,10 +174,16 @@
   h4,
   h5,
   h6 {
-    font-family: "Playfair Display", serif;
+    font-family: "Inter", system-ui, sans-serif;
     font-weight: 700;
-    letter-spacing: normal;
+    letter-spacing: -0.02em;
+    text-rendering: optimizeLegibility;
   }
+
+  .font-display {
+    font-family: "Playfair Display", serif;
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),

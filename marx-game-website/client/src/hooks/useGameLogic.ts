@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 
 export interface GameStats {
   money: number;
@@ -203,20 +203,66 @@ const SCENARIOS: Scenario[] = [
 ];
 
 export function useGameLogic() {
-  const [gameState, setGameState] = useState<
+   const [gameState, setGameState] = useState<
     "registration" | "character-select" | "character-intro" | "quiz" | "playing" | "ended"
-  >("registration");
+  >(() => {
+    return (localStorage.getItem("rpg_game_state") as any) || "registration";
+  });
   
   const [playerName, setPlayerName] = useState<string>(() => {
     return localStorage.getItem("rpg_player_name") || "";
   });
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
-    null
-  );
-  const [stats, setStats] = useState<GameStats | null>(null);
-  const [currentRound, setCurrentRound] = useState(0);
-  const [history, setHistory] = useState<GameHistory[]>([]);
+
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(() => {
+    const saved = localStorage.getItem("rpg_selected_character");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [stats, setStats] = useState<GameStats | null>(() => {
+    const saved = localStorage.getItem("rpg_game_stats");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [currentRound, setCurrentRound] = useState<number>(() => {
+    const saved = localStorage.getItem("rpg_current_round");
+    return saved ? parseInt(saved, 10) : 0;
+  });
+
+  const [history, setHistory] = useState<GameHistory[]>(() => {
+    const saved = localStorage.getItem("rpg_game_history");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [lastFeedback, setLastFeedback] = useState("");
+
+  // Persistence Effects
+  useEffect(() => {
+    localStorage.setItem("rpg_game_state", gameState);
+  }, [gameState]);
+
+  useEffect(() => {
+    if (selectedCharacter) {
+      localStorage.setItem("rpg_selected_character", JSON.stringify(selectedCharacter));
+    } else {
+      localStorage.removeItem("rpg_selected_character");
+    }
+  }, [selectedCharacter]);
+
+  useEffect(() => {
+    if (stats) {
+      localStorage.setItem("rpg_game_stats", JSON.stringify(stats));
+    } else {
+      localStorage.removeItem("rpg_game_stats");
+    }
+  }, [stats]);
+
+  useEffect(() => {
+    localStorage.setItem("rpg_current_round", currentRound.toString());
+  }, [currentRound]);
+
+  useEffect(() => {
+    localStorage.setItem("rpg_game_history", JSON.stringify(history));
+  }, [history]);
 
   const register = useCallback((name: string) => {
     const trimmedName = name.trim();
@@ -300,7 +346,7 @@ export function useGameLogic() {
     [currentRound, selectedCharacter, stats]
   );
 
-  const resetGame = useCallback(() => {
+   const resetGame = useCallback(() => {
     // Keep the player name but reset progress
     setGameState("character-select");
     setSelectedCharacter(null);
@@ -308,10 +354,23 @@ export function useGameLogic() {
     setCurrentRound(0);
     setHistory([]);
     setLastFeedback("");
+    
+    // Explicitly clear some items to be sure
+    localStorage.removeItem("rpg_selected_character");
+    localStorage.removeItem("rpg_game_stats");
+    localStorage.removeItem("rpg_current_round");
+    localStorage.removeItem("rpg_game_history");
   }, []);
 
   const changeIdentity = useCallback(() => {
+    // Clear EVERYTHING
     localStorage.removeItem("rpg_player_name");
+    localStorage.removeItem("rpg_game_state");
+    localStorage.removeItem("rpg_selected_character");
+    localStorage.removeItem("rpg_game_stats");
+    localStorage.removeItem("rpg_current_round");
+    localStorage.removeItem("rpg_game_history");
+
     setPlayerName("");
     setGameState("registration");
     setSelectedCharacter(null);

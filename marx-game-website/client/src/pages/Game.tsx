@@ -24,7 +24,9 @@ import {
   Trophy,
   Sparkles,
   History,
-  ArrowLeft
+  ArrowLeft,
+  Crown,
+  Medal
 } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useGlobalLeaderboard } from "@/hooks/useGlobalLeaderboard";
@@ -33,13 +35,13 @@ import { useLocation } from "wouter";
 function SectionTitle({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
     <div className="space-y-3">
-      <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
         {eyebrow}
       </p>
       <h2 className="text-2xl font-bold text-stone-50 md:text-3xl">
         {title}
       </h2>
-      <p className="text-sm leading-7 text-stone-400">
+      <p className="text-base leading-relaxed text-stone-400">
         {description}
       </p>
     </div>
@@ -120,15 +122,22 @@ const BonusCardSelection = ({ baseAmount, onSelect }: BonusCardSelectionProps) =
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
   
+  // Use provided baseAmount or a random one (10-20) if it's 0
+  const effectiveBase = useMemo(() => {
+    if (baseAmount && baseAmount > 0) return baseAmount;
+    return 10 + Math.floor(Math.random() * 11); // Random 10 to 20
+  }, [baseAmount]);
+
   // Create 3 potential rewards: [lower, base, double]
   const cardValues = useMemo(() => {
     const values = [
-      Math.floor(baseAmount * 0.5) || 5, // Lower
-      baseAmount,                        // Base
-      baseAmount * 2                     // Double (Super Lucky)
+      Math.floor(effectiveBase * 0.5) || 5, // Lower
+      effectiveBase,                        // Base
+      effectiveBase * 2                     // Double (Super Lucky)
     ];
-    return [...values].sort(() => Math.random() - 0.5);
-  }, [baseAmount]);
+    // Add a bit of extra randomness
+    return [...values].map(v => v + (Math.random() > 0.7 ? 5 : 0)).sort(() => Math.random() - 0.5);
+  }, [effectiveBase]);
 
   const handleCardClick = (index: number) => {
     if (selectedIdx !== null) return;
@@ -187,7 +196,7 @@ const BonusCardSelection = ({ baseAmount, onSelect }: BonusCardSelectionProps) =
                       <History className="h-8 w-8 text-amber-500/50" />
                     </div>
                     <div className="w-12 h-px bg-amber-500/20 mb-2"></div>
-                    <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-amber-500/40">Biến số</span>
+                    <span className="text-[10px] uppercase tracking-widest font-bold text-amber-500/40">Biến số</span>
                   </div>
                   
                   {/* Back (Face up) */}
@@ -267,12 +276,12 @@ export default function Game() {
   const { entries: leaderboardEntries, submitScore: addScore, loading: loadingLeaderboard } = useGlobalLeaderboard();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
-  // Submit score to leaderboard when quiz results are reached
+  // Submit total accumulated money to leaderboard when game ends
   useEffect(() => {
-    if (quizState === "results" && playerName) {
-      addScore(playerName, score, totalQuestions);
+    if (gameState === "ended" && playerName && stats) {
+      addScore(playerName, stats.money, 0); // We use 0 as total since we track absolute points now
     }
-  }, [quizState, playerName, score, totalQuestions, addScore]);
+  }, [gameState, playerName, stats?.money, addScore]);
 
   useEffect(() => {
     if (!hasCompletedTheory()) {
@@ -357,7 +366,7 @@ export default function Game() {
               </div>
               <div className="space-y-2">
                 <h1 className="game-title">Đời sống quyết định ý thức</h1>
-                <p className="max-w-2xl text-sm leading-7 text-stone-300 md:text-base">
+                <p className="max-w-2xl text-[15px] leading-relaxed text-stone-300 md:text-base">
                   Chọn một nhân vật, đi qua các biến cố quen thuộc của đời sống
                   và quan sát cách điều kiện vật chất từng bước nhào nặn tư duy,
                   niềm tin cùng hệ giá trị của họ.
@@ -498,7 +507,7 @@ export default function Game() {
                       className="space-y-8"
                     >
                       <div className="space-y-4 text-left">
-                        <label htmlFor="playerName" className="block text-[10px] font-black uppercase tracking-[0.5em] text-amber-500/50 ml-1">
+                        <label htmlFor="playerName" className="block text-[10px] font-black uppercase tracking-widest text-amber-500/50 ml-1">
                           Bí danh Hệ thống
                         </label>
                         <div className="relative">
@@ -530,7 +539,7 @@ export default function Game() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5 }}
-                    className="mt-8 flex items-center justify-center gap-4 text-[9px] uppercase tracking-[0.4em] text-stone-600 font-bold"
+                    className="mt-8 flex items-center justify-center gap-4 text-[9px] uppercase tracking-widest text-stone-600 font-bold"
                   >
                     <div className="h-px w-8 bg-stone-800" />
                     Dữ liệu được mã hóa cục bộ
@@ -572,7 +581,7 @@ export default function Game() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
                             Hồ sơ 0{index + 1}
                           </p>
                           <h3 className="mt-2 text-2xl font-semibold text-stone-50">
@@ -581,7 +590,7 @@ export default function Game() {
                         </div>
                       </div>
 
-                      <p className="mt-4 text-sm leading-7 text-stone-300">
+                      <p className="mt-4 text-[15px] leading-relaxed text-stone-300">
                         {character.description}
                       </p>
 
@@ -639,7 +648,7 @@ export default function Game() {
                   </div>
                   
                   <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.4em] text-stone-400 font-bold">Hồ sơ đã chọn</p>
+                    <p className="text-xs uppercase tracking-widest text-stone-400 font-bold">Hồ sơ đã chọn</p>
                     <h2 className="text-5xl font-black text-white tracking-tight uppercase">
                       {selectedCharacter.name}
                     </h2>
@@ -647,7 +656,7 @@ export default function Game() {
 
                   <div className="w-16 h-1 bg-stone-700/50 mx-auto my-8" />
 
-                  <p className="text-xl md:text-2xl leading-relaxed text-stone-300 font-serif italic max-w-2xl mx-auto px-4">
+                  <p className="text-xl md:text-2xl leading-relaxed text-stone-300 font-medium italic max-w-2xl mx-auto px-4">
                     "{selectedCharacter.description}"
                   </p>
                   
@@ -727,7 +736,7 @@ export default function Game() {
                 <div className="game-panel">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                      <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                         Nhân vật kích hoạt
                       </p>
                       <h2 className="mt-2 text-2xl font-semibold text-stone-50">
@@ -749,7 +758,7 @@ export default function Game() {
                 <div className="game-panel">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                      <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                         {gameState === "quiz" ? "Kiểm tra kiến thức" : "Tiến trình lịch sử"}
                       </p>
                       <p className="mt-2 text-lg font-semibold text-stone-50">
@@ -774,7 +783,7 @@ export default function Game() {
 
                 <div className="game-panel space-y-6">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70 mb-4">
+                    <p className="text-[10px] uppercase tracking-widest text-amber-200/70 mb-4">
                       Tồn tại xã hội
                     </p>
                     <div className="space-y-3">
@@ -801,7 +810,7 @@ export default function Game() {
                   </div>
 
                   <div className="pt-2">
-                    <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70 mb-4">
+                    <p className="text-[10px] uppercase tracking-widest text-amber-200/70 mb-4">
                       Ý thức xã hội
                     </p>
                     <div className="space-y-3">
@@ -832,10 +841,10 @@ export default function Game() {
                             <BookOpen className="w-12 h-12 text-amber-500/50 mb-2" />
                             
                             <div className="space-y-4 max-w-2xl z-10">
-                              <p className="text-sm font-bold tracking-[0.4em] text-amber-500/80 uppercase">
+                              <p className="text-sm font-bold tracking-widest text-amber-500/80 uppercase">
                                 Bối cảnh lịch sử
                               </p>
-                              <h3 className="text-2xl md:text-3xl font-serif italic text-amber-100 leading-relaxed font-semibold">
+                              <h3 className="text-2xl md:text-3xl italic text-amber-100 leading-relaxed font-semibold">
                                 "{currentQuestion.context}"
                               </h3>
                             </div>
@@ -985,24 +994,14 @@ export default function Game() {
                               </motion.div>
                               
                               <div className="text-center">
-                                <p className="text-[10px] uppercase tracking-[0.4em] text-amber-200/50 mb-1">Cấp độ Nhận thức</p>
-                                <h2 className="text-2xl font-black text-stone-50 uppercase tracking-widest">
-                                  {(() => {
-                                    const percent = (score / totalQuestions) * 100;
-                                    if (percent >= 100) return "Đỉnh cao Biện chứng";
-                                    if (percent >= 80) return "Chủ thể Tiên phong";
-                                    if (percent >= 60) return "Nhận thức Tích cực";
-                                    if (percent >= 40) return "Bước đầu Trải nghiệm";
-                                    return "Giai đoạn Tìm tòi";
-                                  })()}
+                                <h2 className="text-sm uppercase tracking-[0.2em] text-stone-400 font-bold">
+                                  Tổng Nguồn lực vật chất
                                 </h2>
-                                <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 border border-white/10">
                                   <span className="text-xl font-bold text-amber-400">{score}</span>
                                   <span className="text-stone-500">/</span>
                                   <span className="text-stone-400 font-medium">{totalQuestions}đ</span>
                                 </div>
                               </div>
-                            </div>
 
                             {/* RIGHT: REWARDS & ACTION */}
                             <div className="flex flex-col justify-center space-y-6">
@@ -1113,7 +1112,7 @@ export default function Game() {
                                             <tr className="border-b border-stone-800 bg-black/20">
                                               <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Vị thế</th>
                                               <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Định danh Chủ thể</th>
-                                              <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500 text-right">Tầm vóc Tư tưởng</th>
+                                              <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500 text-right">Tổng Nguồn lực (đ)</th>
                                             </tr>
                                           </thead>
                                           <tbody>
@@ -1123,12 +1122,25 @@ export default function Game() {
                                                 className={`border-b border-stone-800/50 transition-colors ${entry.name === playerName ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
                                               >
                                                 <td className="px-6 py-4">
-                                                  <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${
-                                                    idx < 3 ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30' : 
-                                                    'bg-stone-800 text-stone-400'
-                                                  }`}>
-                                                    {idx + 1}
-                                                  </span>
+                                                  <div className="flex items-center gap-3">
+                                                    <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${
+                                                      idx === 0 ? 'bg-amber-500 text-stone-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]' :
+                                                      idx === 1 ? 'bg-stone-300 text-stone-900 shadow-[0_0_10px_rgba(255,255,255,0.3)]' :
+                                                      idx === 2 ? 'bg-orange-700 text-orange-50 shadow-[0_0_10px_rgba(194,65,12,0.3)]' :
+                                                      'bg-stone-800 text-stone-400 border border-stone-700'
+                                                    }`}>
+                                                      {idx === 0 ? <Crown className="h-4 w-4" /> : 
+                                                       idx === 1 || idx === 2 ? <Medal className="h-4 w-4" /> : 
+                                                       idx + 1}
+                                                    </span>
+                                                    {idx < 3 && (
+                                                      <span className={`hidden sm:inline text-[9px] font-black uppercase tracking-[0.2em] ${
+                                                        idx === 0 ? 'text-amber-500' : idx === 1 ? 'text-stone-300' : 'text-orange-500'
+                                                      }`}>
+                                                        {idx === 0 ? 'Thủ Khoa' : idx === 1 ? 'Bảng Nhãn' : 'Thám Hoa'}
+                                                      </span>
+                                                    )}
+                                                  </div>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                   <div className="flex items-center gap-2">
@@ -1138,14 +1150,16 @@ export default function Game() {
                                                     {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
                                                   </div>
                                                 </td>
-                                                <td className="px-6 py-4 text-right font-mono font-bold">
-                                                  <span className={`${
-                                                    entry.score >= 9 ? 'text-amber-400' :
-                                                    entry.score >= 7 ? 'text-stone-400' :
-                                                    'text-red-400'
-                                                  }`}>
-                                                    {Math.round((entry.score / entry.total) * 100)}%
-                                                  </span>
+                                                <td className="px-6 py-4 text-right">
+                                                  <div className="flex flex-col items-end">
+                                                    <span className={`font-mono text-lg font-black ${
+                                                      entry.score >= 100 ? 'text-amber-400' :
+                                                      entry.score >= 50 ? 'text-stone-300' :
+                                                      'text-stone-500'
+                                                    }`}>
+                                                      {entry.score.toLocaleString()}đ
+                                                    </span>
+                                                  </div>
                                                 </td>
                                               </tr>
                                             ))}
@@ -1185,7 +1199,7 @@ export default function Game() {
                       <>
                         <div className="game-panel game-panel-glow">
                           <div className="flex flex-wrap items-center gap-3">
-                            <p className="text-xs uppercase tracking-[0.28em] text-amber-200/60">
+                            <p className="text-xs uppercase tracking-widest text-amber-200/60">
                               Giai đoạn {currentRound + 1}
                             </p>
                           </div>
@@ -1214,7 +1228,7 @@ export default function Game() {
                                   <span className="flex-1 text-left">
                                     {choice.text}
                                   </span>
-                                  <span className="text-xs uppercase tracking-[0.3em] text-amber-100/50">
+                                  <span className="text-xs uppercase tracking-widest text-amber-100/50">
                                     Chọn
                                   </span>
                                 </Button>
@@ -1225,7 +1239,7 @@ export default function Game() {
 
                         <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
                           <div className="game-panel">
-                            <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                            <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                               Nhật ký tác động
                             </p>
 
@@ -1244,7 +1258,7 @@ export default function Game() {
                                       key={`${entry.scenario}-${index}`}
                                       className="game-log-entry"
                                     >
-                                      <p className="text-xs uppercase tracking-[0.28em] text-amber-200/60">
+                                      <p className="text-xs uppercase tracking-widest text-amber-200/60">
                                         {entry.scenario}
                                       </p>
                                       <p className="mt-2 text-sm font-medium text-stone-100">
@@ -1260,7 +1274,7 @@ export default function Game() {
                           </div>
 
                           <div className="game-panel">
-                            <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                            <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                               Phản hồi gần nhất
                             </p>
                             <div className="mt-4 min-h-[180px] rounded-[22px] border border-white/10 bg-white/5 p-5">
@@ -1300,7 +1314,7 @@ export default function Game() {
                   </div>
 
                   <div className="min-w-[220px] rounded-[24px] border border-amber-300/20 bg-black/20 p-5">
-                    <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                    <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                       Vai trò hoàn thành
                     </p>
                     <p className="mt-2 text-2xl font-semibold text-stone-50">
@@ -1312,7 +1326,7 @@ export default function Game() {
 
               <div className="grid gap-6 lg:grid-cols-[1fr_1fr_1.1fr]">
                 <div className="game-panel">
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                  <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                     Tồn tại xã hội cuối cùng
                   </p>
                   <div className="mt-4 space-y-3">
@@ -1323,7 +1337,7 @@ export default function Game() {
                 </div>
 
                 <div className="game-panel">
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                  <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                     Ý thức hình thành
                   </p>
                   <div className="mt-4 space-y-3">
@@ -1341,7 +1355,7 @@ export default function Game() {
                 </div>
 
                 <div className="game-panel">
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                  <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                     Trích đoạn triết học
                   </p>
                   <div className="mt-4 rounded-[22px] border border-amber-300/20 bg-white/5 p-5">
@@ -1350,7 +1364,7 @@ export default function Game() {
                       họ, mà ngược lại, chính sự tồn tại xã hội quyết định ý
                       thức của họ."
                     </p>
-                    <p className="mt-4 text-xs uppercase tracking-[0.3em] text-amber-200/70">
+                    <p className="text-xs uppercase tracking-wider text-amber-200/70 mt-4 font-semibold">
                       Karl Marx
                     </p>
                   </div>
@@ -1359,7 +1373,7 @@ export default function Game() {
 
               <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
                 <div className="game-panel">
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                  <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                     Lịch sử lựa chọn
                   </p>
                   <div className="mt-4 space-y-3">
@@ -1369,10 +1383,10 @@ export default function Game() {
                         className="game-log-entry"
                       >
                         <div className="flex items-center justify-between gap-4">
-                          <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-100/80">
+                          <p className="text-sm font-medium uppercase tracking-widest text-amber-100/80">
                             Chương {index + 1}
                           </p>
-                          <p className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                          <p className="text-xs uppercase tracking-widest text-stone-400">
                             {entry.scenario}
                           </p>
                         </div>
@@ -1389,7 +1403,7 @@ export default function Game() {
 
                 <div className="game-panel space-y-6">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.35em] text-amber-200/70">
+                    <p className="text-[10px] uppercase tracking-widest text-amber-200/70">
                       Tổng quan tác động
                     </p>
                     <Progress value={100} className="mt-4 h-2.5 bg-white/10" />

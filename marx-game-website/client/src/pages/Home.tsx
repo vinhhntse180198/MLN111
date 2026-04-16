@@ -101,6 +101,44 @@ const relationshipAspects = [
   },
 ];
 
+const consciousnessStructure = [
+  {
+    category: "Theo cấp độ nhận thức",
+    items: [
+      {
+        title: "Ý thức thông thường",
+        subtitle: "Ý thức đời thường",
+        description:
+          "Toàn bộ những tri thức, quan niệm hình thành một cách trực tiếp và tự phát từ trong hoạt động thực tiễn hàng ngày.",
+        examples: "Kinh nghiệm dân gian, thói quen sinh hoạt",
+      },
+      {
+        title: "Ý thức lý luận",
+        description:
+          "Những tư tưởng, quan điểm được hệ thống hóa, khái quát hóa thành các học thuyết, lý luận khoa học.",
+        examples: "Các định lý khoa học, học thuyết triết học",
+      },
+    ],
+  },
+  {
+    category: "Theo trình độ & phương thức phản ánh",
+    items: [
+      {
+        title: "Tâm lý xã hội",
+        description:
+          "Bao gồm tình cảm, thói quen, tâm trạng... hình thành trực tiếp và tự phát do ảnh hưởng của điều kiện sống hàng ngày.",
+        examples: "Tình cảm cộng đồng, tâm trạng giai cấp",
+      },
+      {
+        title: "Hệ tư tưởng xã hội",
+        description:
+          "Hệ thống quan điểm, tư tưởng (chính trị, đạo đức, tôn giáo...) được hệ thống hóa, hình thành một cách tự giác.",
+        examples: "Lý luận chính trị, hệ thống pháp quyền",
+      },
+    ],
+  },
+];
+
 // Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -128,9 +166,10 @@ export default function Home() {
 
   useEffect(() => {
     // Check if there's an active game session
-    const gameState = localStorage.getItem("gameState");
-    const selectedCharacter = localStorage.getItem("selectedCharacter");
-    setIsGameInProgress(!!gameState && !!selectedCharacter);
+    const playerName = localStorage.getItem("rpg_player_name");
+    const gameState = localStorage.getItem("rpg_game_state");
+    // Game is in progress if player has registered and hasn't finished
+    setIsGameInProgress(!!playerName && gameState !== "ended");
   }, []);
 
   return (
@@ -193,14 +232,14 @@ export default function Home() {
                 <div className="space-y-8">
                   <div className="flex flex-wrap items-center gap-3">
                     <History className="h-4 w-4 text-amber-200/60" />
-                    <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-amber-200/60">
+                    <p className="text-[11px] font-medium uppercase tracking-widest text-amber-200/60">
                       Chương I: Quy luật của Tồn tại
                     </p>
                   </div>
 
                   <div className="space-y-6">
                     <div className="inline-flex rounded-lg border border-amber-300/30 bg-amber-300/5 px-5 py-2 backdrop-blur-sm">
-                      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-100">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-amber-100">
                         Triết học Mác - Lênin
                       </p>
                     </div>
@@ -221,7 +260,7 @@ export default function Home() {
                       "Không phải ý thức quyết định đời sống mà chính đời sống
                       quyết định ý thức."
                     </p>
-                    <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70 mt-3 font-semibold">
+                    <p className="text-xs uppercase tracking-widest text-amber-200/70 mt-3 font-semibold">
                       Karl Marx
                     </p>
                   </div>
@@ -240,7 +279,7 @@ export default function Home() {
 
               <motion.div variants={itemVariants} className="space-y-5">
                 <div className="game-panel p-7 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm hover:border-amber-300/40 transition-all duration-300">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-6">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-200/70 mb-6">
                     Cơ sở Lý luận
                   </p>
                   <div className="space-y-4">
@@ -269,8 +308,8 @@ export default function Home() {
                 </div>
 
                 <div className="game-panel p-7 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-5">
-                    Diễn giải tính quy luật
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60 mb-5">
+                    Diễn giải quy luật
                   </p>
                   <div className="space-y-4 text-sm leading-relaxed text-stone-400">
                     <p>
@@ -311,7 +350,7 @@ export default function Home() {
                   <div className="p-2.5 bg-amber-300/10 rounded-lg">
                     <Landmark className="h-5 w-5 text-amber-200" />
                   </div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
                     Ba trụ cột nền tảng
                   </p>
                 </div>
@@ -380,23 +419,90 @@ export default function Home() {
                   <div className="p-2.5 bg-amber-300/10 rounded-lg">
                     <BookOpen className="h-6 w-6 text-amber-200" />
                   </div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70">
-                    Khái niệm nền tảng
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
+                    Khái niệm cơ bản
                   </p>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight text-amber-50 mb-6">
+                <h2 className="text-3xl md:text-5xl font-bold leading-tight text-amber-50 mb-6 tracking-tight">
                   Tồn tại xã hội là gì?
                 </h2>
-                <p className="text-lg leading-relaxed text-amber-50 font-medium mb-6 py-5 px-6 border-l-4 border-amber-400 bg-amber-300/5">
+                <p className="text-lg leading-relaxed text-amber-50 font-semibold mb-6 py-5 px-6 border-l-4 border-amber-400 bg-amber-300/5 rounded-r-xl">
                   Toàn bộ những sinh hoạt vật chất và những điều kiện sinh hoạt
                   vật chất của xã hội trong những giai đoạn lịch sử nhất định.
                 </p>
-                <p className="text-base leading-relaxed text-stone-400">
+                <p className="text-sm md:text-base leading-relaxed text-stone-400">
                   Nói cách khác, tồn tại xã hội bao gồm tất cả các yếu tố khách
                   quan tác động đến sự tồn tại và phát triển của con người, từ
                   môi trường tự nhiên cho đến cách thức mà họ sản xuất những thứ
                   cần thiết để sống.
                 </p>
+              </motion.div>
+
+              <motion.div
+                variants={itemVariants}
+                className="game-panel p-8 rounded-xl border border-amber-300/20"
+              >
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="p-2.5 bg-amber-300/10 rounded-lg">
+                    <GraduationCap className="h-6 w-6 text-amber-200" />
+                  </div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
+                    Khái niệm & Kết cấu
+                  </p>
+                </div>
+                <div className="grid gap-12 lg:grid-cols-[0.4fr_0.6fr]">
+                  <div className="space-y-6">
+                    <h2 className="text-3xl md:text-4xl font-bold leading-tight text-amber-50 tracking-tight">
+                      Ý thức xã hội là gì?
+                    </h2>
+                    <p className="text-lg leading-relaxed text-amber-50 font-semibold py-5 px-6 border-l-4 border-amber-400 bg-amber-300/5 rounded-r-xl">
+                      Khái niệm triết học dùng để chỉ các mặt, các bộ phận khác
+                      nhau của lĩnh vực tinh thần xã hội như quan điểm, tư
+                      tưởng, tình cảm, tâm trạng...
+                    </p>
+                    <p className="text-sm leading-relaxed text-stone-400">
+                      Các bộ phận này nảy sinh từ tồn tại xã hội và phản ánh tồn
+                      tại xã hội trong những giai đoạn phát triển nhất định, tạo
+                      nên thế giới quan của con người.
+                    </p>
+                  </div>
+
+                  <div className="space-y-8">
+                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-amber-200/40 pb-2 border-b border-amber-300/10">
+                      Kết cấu của Ý thức xã hội
+                    </h3>
+                    <div className="grid gap-6 sm:grid-cols-2">
+                      {consciousnessStructure.map((group, idx) => (
+                        <div key={idx} className="space-y-4">
+                          <p className="text-[10px] font-black text-amber-400/80 uppercase tracking-widest">
+                            {group.category}
+                          </p>
+                          <div className="space-y-4">
+                            {group.items.map((item, i) => (
+                              <motion.div
+                                key={i}
+                                whileHover={{ x: 4, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
+                                className="p-5 rounded-xl bg-white/[0.03] border border-white/5 space-y-2.5 transition-all duration-300"
+                              >
+                                <p className="text-base font-bold text-amber-100 flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
+                                  {item.title}
+                                </p>
+                                <p className="text-sm leading-relaxed text-stone-300">
+                                  {item.description}
+                                </p>
+                                <p className="text-[12px] text-amber-200/50 italic flex items-start gap-2">
+                                  <span className="w-1 h-px bg-amber-200/30 mt-2 flex-shrink-0" />
+                                  <span>Ví dụ: {item.examples}</span>
+                                </p>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             </motion.div>
           </div>
@@ -425,7 +531,7 @@ export default function Home() {
                   <div className="p-2.5 bg-amber-300/10 rounded-lg">
                     <History className="h-6 w-6 text-amber-200" />
                   </div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
                     Các yếu tố cơ bản
                   </p>
                 </div>
@@ -484,7 +590,7 @@ export default function Home() {
                   <div className="p-2.5 bg-amber-300/10 rounded-lg">
                     <Repeat className="h-6 w-6 text-amber-200" />
                   </div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/60">
                     Mối quan hệ biện chứng
                   </p>
                 </div>
@@ -544,69 +650,95 @@ export default function Home() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
-              className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"
+              className="game-panel p-8 md:p-14 rounded-[2rem] border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-xl shadow-2xl relative overflow-hidden"
             >
-              <motion.div
-                variants={itemVariants}
-                className="game-panel p-8 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm"
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-8">
-                  Hệ thống Luận điểm
-                </p>
-                <div className="space-y-3">
-                  {presentationOutline.map((item, index) => (
-                    <motion.div
-                      key={item}
-                      variants={itemVariants}
-                      whileHover={{ x: 4 }}
-                      className="game-chip p-5 rounded-lg border border-amber-300/25 bg-amber-300/8 hover:bg-amber-300/15 transition-all duration-300"
-                    >
-                      <div className="flex items-start gap-4">
-                        <span className="game-chip-label inline-flex items-center justify-center w-8 h-8 bg-amber-300/20 rounded-full text-xs font-bold text-amber-100 flex-shrink-0">
-                          {index + 1}
-                        </span>
-                        <span className="game-chip-value text-sm leading-relaxed text-stone-300 pt-1">
-                          {item}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                variants={itemVariants}
-                className="game-panel p-8 rounded-xl border border-amber-300/20 bg-gradient-to-br from-amber-300/5 to-amber-300/[0.02] backdrop-blur-sm flex flex-col justify-between"
-              >
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-200/70 mb-8">
-                    Hiện thực hóa Vận động
-                  </p>
-                  <h2 className="text-3xl md:text-4xl font-bold leading-tight text-amber-50 mb-6">
-                    Mô phỏng: Game minh họa điều này như thế nào?
-                  </h2>
-                  <div className="space-y-4 mb-8 text-sm leading-relaxed text-stone-400">
-                    <p>
-                      Game không giảng lý thuyết bằng chữ, mà cho bạn thấy sự vận động đó qua các lựa chọn:
+              <div className="relative z-10 space-y-12">
+                {/* Top Section */}
+                <div className="text-center max-w-4xl mx-auto space-y-4">
+                  <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-amber-300/10 border border-amber-300/20 backdrop-blur-sm">
+                    <Repeat className="h-3.5 w-3.5 text-amber-200 animate-spin-slow" />
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-amber-200/80">
+                      Hiện thực hóa Vận động
                     </p>
-                    <div className="mt-5 space-y-4">
-                      {demoFlow.map(item => (
-                        <div key={item.title} className="game-chip">
-                          <span className="game-chip-label">{item.title}</span>
-                          <span className="game-chip-value">{item.body}</span>
-                        </div>
+                  </div>
+                  <h2 className="text-4xl md:text-5xl font-bold leading-tight text-amber-50 tracking-tight">
+                    Mô phỏng: Game minh họa như thế nào?
+                  </h2>
+                  <p className="text-sm md:text-base text-stone-400 leading-relaxed max-w-2xl mx-auto">
+                    Biến lý thuyết thành trải nghiệm sống động qua các tình huống thực tế.
+                  </p>
+                </div>
+
+                {/* Middle Grid */}
+                <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+                  {/* Left Column: Theory */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 pb-3 border-b border-amber-300/10">
+                      <div className="p-2 bg-amber-300/10 rounded-lg">
+                        <Landmark className="h-4 w-4 text-amber-200" />
+                      </div>
+                      <h3 className="text-base font-bold text-amber-100 uppercase tracking-widest">
+                        Hệ thống Luận điểm
+                      </h3>
+                    </div>
+                    <div className="space-y-3">
+                      {presentationOutline.map((item, index) => (
+                        <motion.div
+                          key={item}
+                          variants={itemVariants}
+                          whileHover={{ x: 6, backgroundColor: "rgba(251, 191, 36, 0.08)" }}
+                          className="game-chip p-4 rounded-xl border border-amber-300/15 bg-amber-300/5 transition-all duration-300 group"
+                        >
+                          <div className="flex items-center gap-4">
+                            <span className="game-chip-label inline-flex items-center justify-center w-8 h-8 bg-amber-300/20 rounded-lg text-xs font-bold text-amber-100 flex-shrink-0">
+                              {index + 1}
+                            </span>
+                            <span className="game-chip-value text-sm text-stone-300 font-medium">
+                              {item}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Experience Steps */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 pb-3 border-b border-amber-300/10">
+                      <div className="p-2 bg-amber-300/10 rounded-lg">
+                        <Play className="h-4 w-4 text-amber-200" />
+                      </div>
+                      <h3 className="text-base font-bold text-amber-100 uppercase tracking-widest">
+                        Các bước Trải nghiệm
+                      </h3>
+                    </div>
+                    <div className="space-y-3">
+                      {demoFlow.map((item, index) => (
+                        <motion.div 
+                          key={item.title} 
+                          variants={itemVariants}
+                          whileHover={{ x: 6, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
+                          className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300"
+                        >
+                          <div className="text-amber-200/40 font-black text-xl italic w-8 text-center flex-shrink-0">
+                            0{index + 1}
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-amber-100 font-bold text-sm tracking-tight">{item.title}</p>
+                            <p className="text-xs text-stone-400 leading-relaxed line-clamp-2">{item.body}</p>
+                          </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div
-                  className={`flex flex-col gap-4 items-start`}
-                >
+                {/* Bottom CTA */}
+                <div className="pt-8 border-t border-amber-300/10 flex flex-col items-center">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full"
+                    className="w-full max-w-md"
                   >
                     <Button
                       onClick={() => {
@@ -614,23 +746,23 @@ export default function Home() {
                         setLocation("/game");
                       }}
                       size="lg"
-                      className="game-cta w-full px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg transition-all duration-300 border-none justify-center"
+                      className="game-cta w-full px-12 py-7 bg-amber-600 hover:bg-amber-500 text-white text-lg font-bold rounded-xl transition-all duration-300 border-none justify-center shadow-[0_15px_40px_rgba(217,119,6,0.35)]"
                     >
                       {isGameInProgress ? (
                         <>
-                          <Play className="h-5 w-5 mr-2" />
-                          Tiếp tục chơi ván hiện tại
+                          <Play className="h-5 w-5 mr-3" />
+                          TIẾP TỤC TRÒ CHƠI
                         </>
                       ) : (
                         <>
-                          Bắt đầu chơi
-                          <ArrowRight className="h-5 w-5 ml-2" />
+                          BẮT ĐẦU NGAY
+                          <ArrowRight className="h-5 w-5 ml-3" />
                         </>
                       )}
                     </Button>
                   </motion.div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </motion.section>

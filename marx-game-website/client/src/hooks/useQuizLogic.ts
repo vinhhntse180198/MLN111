@@ -12,21 +12,27 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
   const [waitingForBonus, setWaitingForBonus] = useState(false);
   const [showContextIntro, setShowContextIntro] = useState(false);
 
-  // Filter questions based on roleId if provided, otherwise show all
+  // Filter and randomize questions based on roleId if provided, otherwise show all
   const filteredQuestions = useMemo(() => {
-    let questions = [];
+    let roleQuestions: QuizQuestion[] = [];
+    let bossQuestions: QuizQuestion[] = [];
+
     if (!roleId) {
-      questions = QUIZ_QUESTIONS;
+      roleQuestions = [...QUIZ_QUESTIONS];
     } else {
-      questions = QUIZ_QUESTIONS.filter(q => q.roleId === roleId || q.roleId === "all");
+      roleQuestions = QUIZ_QUESTIONS.filter(q => q.roleId === roleId);
+      bossQuestions = QUIZ_QUESTIONS.filter(q => q.roleId === "all");
     }
 
-    // Ensure questions with roleId "all" (Boss) are at the end
-    return [...questions].sort((a, b) => {
-      if (a.roleId === "all" && b.roleId !== "all") return 1;
-      if (a.roleId !== "all" && b.roleId === "all") return -1;
-      return 0;
-    });
+    // Shuffle only the role-specific questions
+    const shuffledRoleQuestions = [...roleQuestions];
+    for (let i = shuffledRoleQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledRoleQuestions[i], shuffledRoleQuestions[j]] = [shuffledRoleQuestions[j], shuffledRoleQuestions[i]];
+    }
+
+    // Combine shuffled role questions (limit to 5) with boss questions at the end
+    return [...shuffledRoleQuestions.slice(0, 5), ...bossQuestions];
   }, [roleId]);
 
 
@@ -87,7 +93,12 @@ export function useQuizLogic(roleId?: string | null, onBonusEarned?: (amount: nu
       setAnswers(prev => [...prev, answerIndex]);
       setLastSelected(null);
 
-      if (isCorrect && currentQuestion.bonusMoney && currentQuestion.bonusMoney > 0) {
+      // Trigger bonus card system
+      // Logic: 100% chance if question has bonusMoney, 70% random chance otherwise for correct answers
+      const hasGuaranteedBonus = currentQuestion.bonusMoney && currentQuestion.bonusMoney > 0;
+      const randomChance = Math.random() > 0.3; // 70% chance
+      
+      if (isCorrect && (hasGuaranteedBonus || randomChance)) {
         // Pause here for the card pick game
         setWaitingForBonus(true);
         setIsChecking(false);

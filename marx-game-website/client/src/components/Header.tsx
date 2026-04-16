@@ -24,7 +24,7 @@ export default function Header() {
               <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-200 bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">
                 Tồn tại
               </span>
-              <span className="mx-2 text-stone-600 font-serif italic text-lg">&</span>
+              <span className="mx-2 text-stone-600 italic text-lg opacity-60">&</span>
               <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-200 bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_4s_linear_infinite] delay-1000">
                 Ý thức
               </span>

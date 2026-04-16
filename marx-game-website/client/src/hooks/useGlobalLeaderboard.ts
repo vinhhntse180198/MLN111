@@ -29,7 +29,8 @@ export function useGlobalLeaderboard() {
 
     try {
       const scoresRef = ref(db, "scores");
-      const topScoresQuery = query(scoresRef, orderByChild("scoreRatio"), limitToLast(50));
+      // Order by raw score to get the top performers
+      const topScoresQuery = query(scoresRef, orderByChild("score"), limitToLast(100));
 
       const unsubscribe = onValue(topScoresQuery, (snapshot) => {
         try {
@@ -42,28 +43,26 @@ export function useGlobalLeaderboard() {
             });
           }
 
-          // Combine with legends and sort
+          // Combine with legends and sort by score (Primary: score DESC, Secondary: date ASC)
           const combined = [...LEGENDS, ...playerEntries].sort((a, b) => {
-            const ratioA = a.score / a.total;
-            const ratioB = b.score / b.total;
-            if (ratioB !== ratioA) return ratioB - ratioA;
-            return b.date - a.date;
+            if (b.score !== a.score) return b.score - a.score;
+            return a.date - b.date; // Earlier achiever wins the tie
           });
 
-          // Keep only top 50 unique names (excluding legends)
+          // Keep only top unique names, keeping their best score
           const uniqueMap = new Map<string, LeaderboardEntry>();
           combined.forEach(entry => {
-            if (!uniqueMap.has(entry.name) || (entry.score / entry.total) > (uniqueMap.get(entry.name)!.score / uniqueMap.get(entry.name)!.total)) {
+            const existing = uniqueMap.get(entry.name);
+            if (!existing || entry.score > existing.score) {
               uniqueMap.set(entry.name, entry);
             }
           });
 
+          // Final sort and slice to top 50
           setEntries(Array.from(uniqueMap.values()).sort((a, b) => {
-            const ratioA = a.score / a.total;
-            const ratioB = b.score / b.total;
-            if (ratioB !== ratioA) return ratioB - ratioA;
-            return b.date - a.date;
-          }));
+            if (b.score !== a.score) return b.score - a.score;
+            return a.date - b.date;
+          }).slice(0, 50));
           setLoading(false);
         } catch (innerError) {
           console.error("Error processing leaderboard snapshot:", innerError);
@@ -84,22 +83,22 @@ export function useGlobalLeaderboard() {
   const submitScore = useCallback(async (name: string, score: number, total: number) => {
     if (!name) return;
     
-    const scoresRef = ref(db, `scores/${name.replace(/[.#$[\]]/g, "_")}`);
-    const scoreRatio = score / total;
+    // Clean name for firebase key
+    const safeName = name.replace(/[.#$[\]]/g, "_");
+    const scoresRef = ref(db, `scores/${safeName}`);
+    const scoreRatio = total > 0 ? score / total : 0;
 
-    // Only update if current score is better
     const newEntry: LeaderboardEntry = {
       name,
       score,
       total,
       date: Date.now(),
-      // Add a hidden sorting field (ratio * 1000000)
     };
 
     try {
       await set(scoresRef, {
         ...newEntry,
-        scoreRatio: scoreRatio
+        scoreRatio: scoreRatio // Keep ratio for metadata
       });
     } catch (e) {
       console.error("Failed to submit score", e);
