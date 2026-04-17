@@ -382,8 +382,17 @@ export default function Game() {
                   onClick={() => setLocation("/")}
                   className="border-amber-300/20 bg-white/5 text-amber-50 hover:bg-white/10"
                 >
-                  <ArrowLeft className="h-4 w-4" />
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Lý luận Nền tảng
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowLeaderboard(true)}
+                  className="border-amber-500/30 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20"
+                >
+                  <Trophy className="h-4 w-4 mr-2" />
+                  Bảng xếp hạng
                 </Button>
 
               </div>
@@ -1110,195 +1119,6 @@ export default function Game() {
                             </div>
                           </div>
                         </div>
-
-                        {/* HALL OF LEGENDS MODAL OVERLAY */}
-                        <AnimatePresence>
-                          {showLeaderboard && (
-                            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                              <motion.div 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setShowLeaderboard(false)}
-                                className="absolute inset-0 bg-stone-950/90 backdrop-blur-xl" 
-                              />
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                className="relative w-full max-w-2xl bg-[#1a1a1a] border border-amber-500/20 rounded-[32px] shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden"
-                              >
-                                <div className="p-8 space-y-6">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-                                        <Trophy className="h-7 w-7" />
-                                      </div>
-                                      <div>
-                                        <h3 className="text-2xl font-black text-stone-50 tracking-tight">Vinh danh Chủ thể Lịch sử</h3>
-                                        <p className="text-[10px] text-amber-500/60 uppercase tracking-[0.3em] font-bold">Bảng Vàng Học thuật</p>
-                                      </div>
-                                    </div>
-                                    <Button 
-                                      onClick={() => setShowLeaderboard(false)}
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="rounded-full hover:bg-white/5 text-stone-500"
-                                    >
-                                      <XCircle className="h-7 w-7" />
-                                    </Button>
-                                  </div>
-
-                                    <div className="flex gap-2 mb-6">
-                                      <button
-                                        onClick={() => setLeaderboardTab("role")}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
-                                          leaderboardTab === "role"
-                                            ? "bg-amber-500/20 border border-amber-400/40 text-amber-200"
-                                            : "bg-white/5 border border-white/10 text-stone-400 hover:bg-white/10"
-                                        }`}
-                                      >
-                                        {selectedCharacter?.id === "farmer" && <Factory className="h-3.5 w-3.5" />}
-                                        {selectedCharacter?.id === "worker" && <Users className="h-3.5 w-3.5" />}
-                                        {selectedCharacter?.id === "student" && <GraduationCap className="h-3.5 w-3.5" />}
-                                        {selectedCharacter?.name || "Vai trò"}
-                                      </button>
-                                      <button
-                                        onClick={() => setLeaderboardTab("total")}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
-                                          leaderboardTab === "total"
-                                            ? "bg-amber-500/20 border border-amber-400/40 text-amber-200"
-                                            : "bg-white/5 border border-white/10 text-stone-400 hover:bg-white/10"
-                                        }`}
-                                      >
-                                        <Crown className="h-3.5 w-3.5" />
-                                        Tổng 3 Role
-                                      </button>
-                                    </div>
-
-                                    <div className="bg-stone-900/50 rounded-2xl border border-stone-800 overflow-hidden min-h-[400px] flex flex-col">
-                                      {loadingLeaderboard ? (
-                                        <div className="flex-1 flex flex-col items-center justify-center gap-4 text-stone-500">
-                                          <div className="h-10 w-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
-                                          <p className="text-xs font-bold uppercase tracking-widest animate-pulse">Đang tải bảng vàng...</p>
-                                        </div>
-                                      ) : (() => {
-                                          const roleKey = selectedCharacter?.id as "farmer" | "worker" | "student" | undefined;
-                                          const sorted = leaderboardTab === "role" && roleKey
-                                            ? [...leaderboardEntries]
-                                                .filter(e => e[roleKey] > 0)
-                                                .sort((a, b) => b[roleKey] - a[roleKey])
-                                                .slice(0, 10)
-                                            : [...leaderboardEntries]
-                                                .filter(e => e.total > 0)
-                                                .sort((a, b) => b.total - a.total)
-                                                .slice(0, 10);
-
-                                          if (sorted.length === 0) {
-                                            return (
-                                              <div className="flex-1 flex items-center justify-center p-8">
-                                                <p className="text-sm text-stone-500 text-center">Chưa có ai lên bảng xếp hạng này.</p>
-                                              </div>
-                                            );
-                                          }
-
-                                          return (
-                                            <table className="w-full text-left text-sm">
-                                              <thead>
-                                                <tr className="border-b border-stone-800 bg-black/20">
-                                                  <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Vị thế</th>
-                                                  <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Định danh Chủ thể</th>
-                                                  <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500 text-right">
-                                                    {leaderboardTab === "role" ? "Nguồn lực (đ)" : "Tổng 3 Role (đ)"}
-                                                  </th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                {sorted.map((entry, idx) => {
-                                                  const displayScore = leaderboardTab === "role" && roleKey ? entry[roleKey] : entry.total;
-                                                  return (
-                                                    <tr 
-                                                      key={`${entry.name}-${idx}`} 
-                                                      className={`border-b border-stone-800/50 transition-colors ${entry.name === playerName ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
-                                                    >
-                                                      <td className="px-6 py-4">
-                                                        <div className="flex items-center gap-3">
-                                                          <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${
-                                                            idx === 0 ? 'bg-amber-500 text-stone-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]' :
-                                                            idx === 1 ? 'bg-stone-300 text-stone-900 shadow-[0_0_10px_rgba(255,255,255,0.3)]' :
-                                                            idx === 2 ? 'bg-orange-700 text-orange-50 shadow-[0_0_10px_rgba(194,65,12,0.3)]' :
-                                                            'bg-stone-800 text-stone-400 border border-stone-700'
-                                                          }`}>
-                                                            {idx === 0 ? <Crown className="h-4 w-4" /> : 
-                                                            idx === 1 || idx === 2 ? <Medal className="h-4 w-4" /> : 
-                                                            idx + 1}
-                                                          </span>
-                                                        </div>
-                                                      </td>
-                                                      <td className="px-6 py-4">
-                                                        <div className="flex flex-col gap-1">
-                                                          <div className="flex items-center gap-2">
-                                                            <span className={`font-bold text-base ${entry.name === playerName ? 'text-amber-400' : 'text-stone-300'}`}>
-                                                              {entry.name}
-                                                            </span>
-                                                            {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
-                                                          </div>
-                                                          
-                                                          {/* Breakdown for total tab */}
-                                                          {leaderboardTab === "total" && (
-                                                            <div className="flex items-center gap-2 text-[10px] font-bold text-stone-500 mt-0.5">
-                                                              <div className="flex items-center gap-1">
-                                                                <span className={entry.farmer > 0 ? "text-amber-500/70" : "text-stone-700 font-normal"}>🌾 {entry.farmer}</span>
-                                                              </div>
-                                                              <div className="flex items-center gap-1">
-                                                                <span className={entry.worker > 0 ? "text-blue-400/70" : "text-stone-700 font-normal"}>🛠️ {entry.worker}</span>
-                                                              </div>
-                                                              <div className="flex items-center gap-1">
-                                                                <span className={entry.student > 0 ? "text-emerald-400/70" : "text-stone-700 font-normal"}>🎓 {entry.student}</span>
-                                                              </div>
-                                                            </div>
-                                                          )}
-                                                        </div>
-                                                      </td>
-                                                      <td className="px-6 py-4 text-right">
-                                                        <span className={`font-mono text-lg font-black ${
-                                                          displayScore >= 100 ? 'text-amber-400' :
-                                                          displayScore >= 50 ? 'text-stone-300' :
-                                                          'text-stone-500'
-                                                        }`}>
-                                                          {displayScore.toLocaleString()}đ
-                                                        </span>
-                                                      </td>
-                                                    </tr>
-                                                  );
-                                                })}
-                                              </tbody>
-                                            </table>
-                                          );
-                                       })()}
-                                    </div>
-
-                                  <div className="pt-2 text-center">
-                                    <p className="text-[11px] text-stone-500 italic">
-                                      "Tồn tại xã hội quyết định ý thức xã hội" — Karl Marx
-                                    </p>
-                                  </div>
-
-                                  <div className="flex justify-center pt-4">
-                                    <Button 
-                                      onClick={() => setShowLeaderboard(false)}
-                                      className="game-cta bg-amber-500 hover:bg-amber-600 px-12 h-14 text-base font-black uppercase tracking-widest shadow-[0_0_30px_rgba(245,158,11,0.2)]"
-                                    >
-                                      Trở về Kết quả
-                                    </Button>
-                                  </div>
-                                </div>
-                              </motion.div>
-                            </div>
-                          )}
-                        </AnimatePresence>
-
-
                       </motion.div>
                     )}
                   </div>
@@ -1528,6 +1348,193 @@ export default function Game() {
                 </div>
               </div>
             </motion.section>
+          )}
+        </AnimatePresence>
+
+        {/* HALL OF LEGENDS MODAL OVERLAY - GLOBALLY ACCESSIBLE */}
+        <AnimatePresence>
+          {showLeaderboard && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowLeaderboard(false)}
+                className="absolute inset-0 bg-stone-950/90 backdrop-blur-xl" 
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="relative w-full max-w-2xl bg-[#1a1a1a] border border-amber-500/20 rounded-[32px] shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden"
+              >
+                <div className="p-8 space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+                        <Trophy className="h-7 w-7" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-black text-stone-50 tracking-tight">Vinh danh Chủ thể Lịch sử</h3>
+                        <p className="text-[10px] text-amber-500/60 uppercase tracking-[0.3em] font-bold">Bảng Vàng Học thuật</p>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={() => setShowLeaderboard(false)}
+                      variant="ghost" 
+                      size="icon" 
+                      className="rounded-full hover:bg-white/5 text-stone-500"
+                    >
+                      <XCircle className="h-7 w-7" />
+                    </Button>
+                  </div>
+
+                    <div className="flex gap-2 mb-6">
+                      <button
+                        onClick={() => setLeaderboardTab("role")}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
+                          leaderboardTab === "role"
+                            ? "bg-amber-500/20 border border-amber-400/40 text-amber-200"
+                            : "bg-white/5 border border-white/10 text-stone-400 hover:bg-white/10"
+                        }`}
+                      >
+                        {selectedCharacter?.id === "farmer" && <Factory className="h-3.5 w-3.5" />}
+                        {selectedCharacter?.id === "worker" && <Users className="h-3.5 w-3.5" />}
+                        {selectedCharacter?.id === "student" && <GraduationCap className="h-3.5 w-3.5" />}
+                        {selectedCharacter?.name || "Vai trò"}
+                      </button>
+                      <button
+                        onClick={() => setLeaderboardTab("total")}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
+                          leaderboardTab === "total"
+                            ? "bg-amber-500/20 border border-amber-400/40 text-amber-200"
+                            : "bg-white/5 border border-white/10 text-stone-400 hover:bg-white/10"
+                        }`}
+                      >
+                        <Crown className="h-3.5 w-3.5" />
+                        Tổng 3 Role
+                      </button>
+                    </div>
+
+                    <div className="bg-stone-900/50 rounded-2xl border border-stone-800 overflow-hidden min-h-[400px] flex flex-col">
+                      {loadingLeaderboard ? (
+                        <div className="flex-1 flex flex-col items-center justify-center gap-4 text-stone-500">
+                          <div className="h-10 w-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+                          <p className="text-xs font-bold uppercase tracking-widest animate-pulse">Đang tải bảng vàng...</p>
+                        </div>
+                      ) : (() => {
+                          const roleKey = selectedCharacter?.id as "farmer" | "worker" | "student" | undefined;
+                          const sorted = leaderboardTab === "role" && roleKey
+                            ? [...leaderboardEntries]
+                                .filter(e => e[roleKey] > 0)
+                                .sort((a, b) => b[roleKey] - a[roleKey])
+                                .slice(0, 10)
+                            : [...leaderboardEntries]
+                                .filter(e => e.total > 0)
+                                .sort((a, b) => b.total - a.total)
+                                .slice(0, 10);
+
+                          if (sorted.length === 0) {
+                            return (
+                              <div className="flex-1 flex items-center justify-center p-8">
+                                <p className="text-sm text-stone-500 text-center">Chưa có ai lên bảng xếp hạng này.</p>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <table className="w-full text-left text-sm">
+                              <thead>
+                                <tr className="border-b border-stone-800 bg-black/20">
+                                  <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Vị thế</th>
+                                  <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500">Định danh Chủ thể</th>
+                                  <th className="px-6 py-4 font-bold uppercase tracking-widest text-[10px] text-stone-500 text-right">
+                                    {leaderboardTab === "role" ? "Nguồn lực (đ)" : "Tổng 3 Role (đ)"}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {sorted.map((entry, idx) => {
+                                  const displayScore = leaderboardTab === "role" && roleKey ? entry[roleKey] : entry.total;
+                                  return (
+                                    <tr 
+                                      key={`${entry.name}-${idx}`} 
+                                      className={`border-b border-stone-800/50 transition-colors ${entry.name === playerName ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}
+                                    >
+                                      <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                          <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${
+                                            idx === 0 ? 'bg-amber-500 text-stone-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]' :
+                                            idx === 1 ? 'bg-stone-300 text-stone-900 shadow-[0_0_10px_rgba(255,255,255,0.3)]' :
+                                            idx === 2 ? 'bg-orange-700 text-orange-50 shadow-[0_0_10px_rgba(194,65,12,0.3)]' :
+                                            'bg-stone-800 text-stone-400 border border-stone-700'
+                                          }`}>
+                                            {idx === 0 ? <Crown className="h-4 w-4" /> : 
+                                            idx === 1 || idx === 2 ? <Medal className="h-4 w-4" /> : 
+                                            idx + 1}
+                                          </span>
+                                        </div>
+                                      </td>
+                                      <td className="px-6 py-4">
+                                        <div className="flex flex-col gap-1">
+                                          <div className="flex items-center gap-2">
+                                            <span className={`font-bold text-base ${entry.name === playerName ? 'text-amber-400' : 'text-stone-300'}`}>
+                                              {entry.name}
+                                            </span>
+                                            {entry.name === playerName && <Badge className="bg-amber-500/20 text-amber-500 text-[8px] h-4 py-0 border-amber-500/30">Bạn</Badge>}
+                                          </div>
+                                          
+                                          {/* Breakdown for total tab */}
+                                          {leaderboardTab === "total" && (
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-stone-500 mt-0.5">
+                                              <div className="flex items-center gap-1">
+                                                <span className={entry.farmer > 0 ? "text-amber-500/70" : "text-stone-700 font-normal"}>🌾 {entry.farmer}</span>
+                                              </div>
+                                              <div className="flex items-center gap-1">
+                                                <span className={entry.worker > 0 ? "text-blue-400/70" : "text-stone-700 font-normal"}>🛠️ {entry.worker}</span>
+                                              </div>
+                                              <div className="flex items-center gap-1">
+                                                <span className={entry.student > 0 ? "text-emerald-400/70" : "text-stone-700 font-normal"}>🎓 {entry.student}</span>
+                                              </div>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </td>
+                                      <td className="px-6 py-4 text-right">
+                                        <span className={`font-mono text-lg font-black ${
+                                          displayScore >= 100 ? 'text-amber-400' :
+                                          displayScore >= 50 ? 'text-stone-300' :
+                                          'text-stone-500'
+                                        }`}>
+                                          {displayScore.toLocaleString()}đ
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          );
+                       })()}
+                    </div>
+
+                  <div className="pt-2 text-center">
+                    <p className="text-[11px] text-stone-500 italic">
+                      "Tồn tại xã hội quyết định ý thức xã hội" — Karl Marx
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center pt-4">
+                    <Button 
+                      onClick={() => setShowLeaderboard(false)}
+                      className="game-cta bg-amber-500 hover:bg-amber-600 px-12 h-14 text-base font-black uppercase tracking-widest shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+                    >
+                      Đóng
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </div>
