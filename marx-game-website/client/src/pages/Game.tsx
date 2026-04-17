@@ -865,7 +865,7 @@ export default function Game() {
                             
                             <div className="space-y-4 max-w-2xl z-10">
                               <p className="text-sm font-bold tracking-widest text-amber-500/80 uppercase">
-                                Bối cảnh lịch sử
+                                Bối cảnh
                               </p>
                               <h3 className="text-2xl md:text-3xl italic text-amber-100 leading-relaxed font-semibold">
                                 "{currentQuestion.context}"
